@@ -47,7 +47,7 @@
                   <Group type="102" attributes="0">
                       <Component id="jLabel2" min="-2" pref="117" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jTextField1" min="-2" pref="433" max="-2" attributes="0"/>
+                      <Component id="tbInputFilePath" min="-2" pref="433" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnChooseFile" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -72,7 +72,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel2" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                          <Component id="jTextField1" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                          <Component id="tbInputFilePath" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                           <Component id="btnChooseFile" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnRunOcr" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -122,7 +122,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnChooseFileActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextField1">
+    <Component class="javax.swing.JTextField" name="tbInputFilePath">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
