@@ -6,9 +6,6 @@
 package com.LankaOCR.OCRActions;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 
@@ -23,7 +20,7 @@ public class OcrActions {
      String result = null;   
      File imageFile = new File(filePath);
 
-        System.out.println(imageFile.getAbsolutePath());
+        
         Tesseract instance = new Tesseract();// JNA Interface Mapping
         instance.setLanguage("sin");
         instance.setHocr(true);
