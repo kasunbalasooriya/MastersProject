@@ -18,9 +18,13 @@ import java.awt.*;
 import java.awt.image.RenderedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  *
@@ -33,7 +37,7 @@ public class StartWindow extends javax.swing.JFrame {
      */
     public StartWindow() {
         initComponents();
-        this.setLocationRelativeTo(null);
+        
     }
 
     /**
@@ -51,7 +55,7 @@ public class StartWindow extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jEditorPane2 = new javax.swing.JEditorPane();
         btnChooseFile = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        tbInputFilePath = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -98,7 +102,7 @@ public class StartWindow extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tbInputFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnChooseFile)
                         .addGap(18, 18, 18)
@@ -118,7 +122,7 @@ public class StartWindow extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tbInputFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnChooseFile)
                             .addComponent(btnRunOcr))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
@@ -132,34 +136,45 @@ public class StartWindow extends javax.swing.JFrame {
     /**
      * method to render tiff ocrInputImage*
      */
-    static Image load(byte[] data) throws Exception {
-        Image ocrInputImage = null;
+    static Image loadImage(byte[] data) throws Exception {
+        
         SeekableStream stream = new ByteArraySeekableStream(data);
         String[] names = ImageCodec.getDecoderNames(stream);
         ImageDecoder dec
                 = ImageCodec.createImageDecoder(names[0], stream, null);
         RenderedImage im = dec.decodeAsRenderedImage();
-        ocrInputImage = PlanarImage.wrapRenderedImage(im).getAsBufferedImage();
+        Image ocrInputImage = PlanarImage.wrapRenderedImage(im).getAsBufferedImage();
         return ocrInputImage;
     }
     
-    OutputPreviewWindow outputPreviewWindow = new OutputPreviewWindow();
-    String filePath, fullpath, filename, language;
+   
+    String inputFilePath, absolutePathWithFileName, inputImageFileName, language;
     
     private void btnRunOcrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunOcrActionPerformed
         
-        fullpath = jTextField1.getText();
-        
+        absolutePathWithFileName = tbInputFilePath.getText();
+        OutputPreviewWindow outputPreviewWindow = new OutputPreviewWindow();
         try {
-            log.info("The name of the file selected for OCR : " + filename + "  at : " + filePath);
-            OcrActions ocrInstance = new OcrActions();
-            String output = ocrInstance.PerformOcr(filePath);
+            log.info("The name of the file selected for OCR : " +absolutePathWithFileName);
+           
+           // Run OCR for the selected file
             
-            outputPreviewWindow.loadFile(filePath, output);
+            OcrActions ocrInstance = new OcrActions();
+            String hocrOutput = ocrInstance.PerformOcr(absolutePathWithFileName);
+           
+            long currentTime = System.currentTimeMillis();
+
+            try (OutputStreamWriter htmlDocWriter = new OutputStreamWriter(new FileOutputStream(inputFilePath+"\\"+currentTime +".html"), StandardCharsets.UTF_8)) {
+                htmlDocWriter.write(hocrOutput);
+            }
+            
+            outputPreviewWindow.loadFile(hocrOutput,String.valueOf(currentTime)+".html",inputFilePath);
             outputPreviewWindow.setExtendedState(outputPreviewWindow.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-            outputPreviewWindow.setResizable(false);
-            outputPreviewWindow.show();
-            //PerformOcr.ocrDocument(filename, fullpath);
+            outputPreviewWindow.setResizable(Boolean.FALSE);
+            outputPreviewWindow.pack();
+            outputPreviewWindow.setVisible(true);
+            
+
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
         }
@@ -174,14 +189,15 @@ public class StartWindow extends javax.swing.JFrame {
         int returnVal;
         returnVal = choose.showOpenDialog(choose);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            System.out.println("You chose to open this file: "
-                    + choose.getSelectedFile().getName());
+            
+        log.info("You chose to open this file: "
+                    + choose.getSelectedFile().getAbsolutePath());
         }
         String inputFilePath = choose.getCurrentDirectory().getAbsolutePath();
-        filename = choose.getSelectedFile().getName();
-        StringBuffer file = new StringBuffer(inputFilePath);
-        inputFilePath = "";
-        //System.out.println(filename);
+        inputImageFileName = choose.getSelectedFile().getName();
+        StringBuilder file = new StringBuilder(inputFilePath);
+//        inputFilePath = "";
+        //System.out.println(inputImageFileName);
 
         for (int p = file.length() - 1; p >= 0; p--) {
             //System.out.println(file.charAt(p));
@@ -192,21 +208,21 @@ public class StartWindow extends javax.swing.JFrame {
         file.insert((file.length()), '\\');
         file.insert((file.length()), '\\');
         inputFilePath = file.toString();
-        filePath = inputFilePath;
-        fullpath = inputFilePath + filename;
-        //System.out.println("jhhhhhm       "+fullpath);
-        jTextField1.setText(fullpath);        // TODO add your handling code here:
+        this.inputFilePath = inputFilePath;
+        absolutePathWithFileName = inputFilePath + inputImageFileName;
+        //System.out.println("jhhhhhm       "+absolutePathWithFileName);
+        tbInputFilePath.setText(absolutePathWithFileName);        // TODO add your handling code here:
 
-        FileInputStream in = null;
+        
         try {
-            in = new FileInputStream(fullpath);
+            FileInputStream in = new FileInputStream(absolutePathWithFileName);
             FileChannel channel = in.getChannel();
             ByteBuffer buffer = ByteBuffer.allocate((int) channel.size());
             channel.read(buffer);
-            Image image = load(buffer.array());
+            Image image = loadImage(buffer.array());
 
             // make sure that the ocrInputImage is not too big
-            //  scale with a width of 500
+            //  scale with a width of 800
             Image imageScaled
                     = image.getScaledInstance(800, -1, Image.SCALE_SMOOTH);
             
@@ -222,12 +238,16 @@ public class StartWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnChooseFileActionPerformed
     
-    private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+   static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StartWindow.class);
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        
+        String log4jConfPath = "log4j.properties";
+        PropertyConfigurator.configure(log4jConfPath);
+        log.info("*************************************Starting Program Execution  *************************************");
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -240,22 +260,21 @@ public class StartWindow extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StartWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StartWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StartWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(StartWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StartWindow().setVisible(true);
+                StartWindow newStartWindow=new StartWindow();
+                newStartWindow.setLocationRelativeTo(null);
+                newStartWindow.setVisible(true);
             }
         });
     }
@@ -269,6 +288,6 @@ public class StartWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField tbInputFilePath;
     // End of variables declaration//GEN-END:variables
 }
