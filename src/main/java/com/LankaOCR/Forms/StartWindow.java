@@ -37,7 +37,7 @@ public class StartWindow extends javax.swing.JFrame {
      */
     public StartWindow() {
         initComponents();
-        
+
     }
 
     /**
@@ -137,7 +137,7 @@ public class StartWindow extends javax.swing.JFrame {
      * method to render tiff ocrInputImage*
      */
     static Image loadImage(byte[] data) throws Exception {
-        
+
         SeekableStream stream = new ByteArraySeekableStream(data);
         String[] names = ImageCodec.getDecoderNames(stream);
         ImageDecoder dec
@@ -146,61 +146,59 @@ public class StartWindow extends javax.swing.JFrame {
         Image ocrInputImage = PlanarImage.wrapRenderedImage(im).getAsBufferedImage();
         return ocrInputImage;
     }
-    
-   
+
     String inputFilePath, absolutePathWithFileName, inputImageFileName, language;
-    
+
     private void btnRunOcrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunOcrActionPerformed
-        
+
         absolutePathWithFileName = tbInputFilePath.getText();
         OutputPreviewWindow outputPreviewWindow = new OutputPreviewWindow();
         try {
-            log.info("The name of the file selected for OCR : " +absolutePathWithFileName);
-           
-           // Run OCR for the selected file
-            
+            log.info("The name of the file selected for OCR : " + absolutePathWithFileName);
+
+            // Run OCR for the selected file
             OcrActions ocrInstance = new OcrActions();
             String hocrOutput = ocrInstance.PerformOcr(absolutePathWithFileName);
-           
+
             long currentTime = System.currentTimeMillis();
 
-            try (OutputStreamWriter htmlDocWriter = new OutputStreamWriter(new FileOutputStream(inputFilePath+"\\"+currentTime +".html"), StandardCharsets.UTF_8)) {
+            try (OutputStreamWriter htmlDocWriter = new OutputStreamWriter(new FileOutputStream(inputFilePath + "\\" + currentTime + ".html"), StandardCharsets.UTF_8)) {
                 htmlDocWriter.write(hocrOutput);
             }
-            
-            outputPreviewWindow.loadFile(hocrOutput,String.valueOf(currentTime)+".html",inputFilePath);
+
+            outputPreviewWindow.loadFile(hocrOutput, String.valueOf(currentTime) + ".html", inputFilePath);
             outputPreviewWindow.setExtendedState(outputPreviewWindow.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             outputPreviewWindow.setResizable(Boolean.FALSE);
             outputPreviewWindow.pack();
             outputPreviewWindow.setVisible(true);
-            
 
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
         }
-        
+
     }//GEN-LAST:event_btnRunOcrActionPerformed
 
     private void btnChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseFileActionPerformed
-        
+
         JFileChooser choose = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("TIF Images", "tif");
         choose.setFileFilter(filter);
         int returnVal;
         returnVal = choose.showOpenDialog(choose);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            
-        log.info("You chose to open this file: "
+
+            log.info("You chose to open this file: "
                     + choose.getSelectedFile().getAbsolutePath());
         }
-        String inputFilePath = choose.getCurrentDirectory().getAbsolutePath();
+        
+        // set variable values for file path and input directory
+        inputFilePath = choose.getCurrentDirectory().getAbsolutePath();
         inputImageFileName = choose.getSelectedFile().getName();
+        
+        
         StringBuilder file = new StringBuilder(inputFilePath);
-//        inputFilePath = "";
-        //System.out.println(inputImageFileName);
 
         for (int p = file.length() - 1; p >= 0; p--) {
-            //System.out.println(file.charAt(p));
             if (file.charAt(p) == '\\') {
                 file.insert(p, '\\');
             }
@@ -208,12 +206,10 @@ public class StartWindow extends javax.swing.JFrame {
         file.insert((file.length()), '\\');
         file.insert((file.length()), '\\');
         inputFilePath = file.toString();
-        this.inputFilePath = inputFilePath;
-        absolutePathWithFileName = inputFilePath + inputImageFileName;
-        //System.out.println("jhhhhhm       "+absolutePathWithFileName);
-        tbInputFilePath.setText(absolutePathWithFileName);        // TODO add your handling code here:
 
-        
+        absolutePathWithFileName = inputFilePath + inputImageFileName;
+        tbInputFilePath.setText(absolutePathWithFileName);       
+
         try {
             FileInputStream in = new FileInputStream(absolutePathWithFileName);
             FileChannel channel = in.getChannel();
@@ -221,11 +217,9 @@ public class StartWindow extends javax.swing.JFrame {
             channel.read(buffer);
             Image image = loadImage(buffer.array());
 
-            // make sure that the ocrInputImage is not too big
-            //  scale with a width of 800
             Image imageScaled
                     = image.getScaledInstance(800, -1, Image.SCALE_SMOOTH);
-            
+
             jLabel1.setLayout(new BorderLayout());
             jLabel1.setIcon(new javax.swing.ImageIcon(imageScaled));
         } catch (FileNotFoundException e) {
@@ -237,14 +231,14 @@ public class StartWindow extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_btnChooseFileActionPerformed
-    
-   static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StartWindow.class);
+
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StartWindow.class);
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         String log4jConfPath = "log4j.properties";
         PropertyConfigurator.configure(log4jConfPath);
         log.info("*************************************Starting Program Execution  *************************************");
@@ -265,14 +259,14 @@ public class StartWindow extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-        
+
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                StartWindow newStartWindow=new StartWindow();
+                StartWindow newStartWindow = new StartWindow();
                 newStartWindow.setLocationRelativeTo(null);
                 newStartWindow.setVisible(true);
             }
