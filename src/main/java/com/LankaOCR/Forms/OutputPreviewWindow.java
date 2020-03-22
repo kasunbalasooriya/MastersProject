@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import javax.swing.text.html.HTMLEditorKit;
 
 /**
  *
@@ -25,34 +26,33 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
      */
     public OutputPreviewWindow() {
         initComponents();
-      
+
     }
 
     private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     static String htmlFileName, htmlFilePath;
 
-    public void loadFile(String filepath, String filename) throws IOException {
+    public void loadFile(String hocrOutput, String htmlOutputFileName , String inputFileDirectory) throws IOException {
 
-        htmlFilePath = filepath;
-        htmlFileName = filename;
-
+        htmlFileName =htmlOutputFileName;
+        htmlFilePath = inputFileDirectory;
+        
         GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Font[] fonts = e.getAllFonts(); // Get the fonts
         for (Font f : fonts) {
             jComboBox1.addItem(f.getName());
         }
-           
-            htmlView.setEditable(false);
-        File file = new File(filepath + "//" + filename + ".html");
-            htmlView.setFont(new Font("Iskoola Pota", 0, 18));
-            htmlView.setContentType("text/html;charset=utf-8");
-            htmlView.setPage((file.toURI().toURL()));
-            htmlView.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
-        // htmlView.setEditable(true);
-            jScrollPane1.add(htmlView);
+        
+        File file = new File(htmlFilePath+"\\"+htmlFileName);
+        htmlView.setEditable(false);
+        htmlView.setFont(new Font("Iskoola Pota", 0, 18));
+        htmlView.setContentType("text/html;charset=utf-8");
+        htmlView.setPage(file.toURI().toURL());
+        htmlView.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
+        jScrollPane1.add(htmlView);
+        
 
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -74,6 +74,11 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
         setTitle("Output Preview");
         setName("Output Preview"); // NOI18N
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                outputWindowClosedHandler(evt);
+            }
+        });
 
         htmlView.setEditorKit(null);
         htmlView.setFont(new java.awt.Font("Iskoola Pota", 0, 11)); // NOI18N
@@ -95,7 +100,7 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        jComboBox1.setFont(new java.awt.Font("Iskoola Pota", 1, 12)); // NOI18N
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -113,7 +118,7 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 965, Short.MAX_VALUE)
+                        .addGap(0, 967, Short.MAX_VALUE)
                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(29, 29, 29)
                         .addComponent(btnCancel))
@@ -121,7 +126,7 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1068, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(64, 64, 64)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -151,20 +156,19 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public static int currrentWordPosition;
-    public static String currentWord="";
+    public static String currentWord = "";
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
 
-
-        File htmlFile = new File(htmlFilePath + "\\" + htmlFileName + ".html");
-        File wordFile = new File(htmlFilePath + "\\" + htmlFileName + ".doc");
+        File htmlFile = new File(htmlFilePath + "\\" + htmlFileName);
+        File wordFile = new File(htmlFilePath + "\\" + htmlFileName.substring(0, htmlFileName.length()-5) + ".doc");
         if (htmlFile.renameTo(wordFile)) {
             log.info("final output written to : " + htmlFilePath + "  with name : " + htmlFileName + ".doc");
         } else {
             log.info("Failed to rename the html file to .doc");
         }
 
-                    log.info("*********** Writing complete *************");
+        log.info("*********** Writing complete *************");
 
         this.dispose();
 
@@ -173,7 +177,7 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
-        File file = new File(htmlFilePath + "\\" + htmlFileName + ".html");
+        File file = new File(htmlFilePath + "\\" + htmlFileName);
 
         if (file.delete()) {
             log.info("deleted file without saving " + file.getName());
@@ -189,40 +193,52 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
         htmlView.setFont(new Font(jComboBox1.getSelectedItem().toString(), 0, 18));
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
+    private void outputWindowClosedHandler(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_outputWindowClosedHandler
+        // TODO add your handling code here:
+        
+        File file = new File(htmlFilePath + "\\" + htmlFileName);
 
-     public String selectWord(int selection){
-        String currentSelectedWord ="";
+        if (file.delete()) {
+            log.info("deleted file without saving " + file.getName());
+        } else {
+            log.info("failed to delete file before cancelling" + file.getName());
+        }
 
-        Document doc =Jsoup .parse(htmlView.getText(), "UTF-8");
-        Elements words= doc.select("span.ocrx_word");
-        int noOfWords=words.size();
+        this.dispose();
+    }//GEN-LAST:event_outputWindowClosedHandler
 
-         if(selection<noOfWords && selection>0) {
-             currentSelectedWord = words.get(selection).text();
-         }else if(selection<noOfWords && selection<0){
-             currrentWordPosition=noOfWords+selection;
-             currentSelectedWord=words.get(currrentWordPosition).text();
-         }else if(selection<noOfWords && selection==0) {
-             currentSelectedWord=words.get(currrentWordPosition).text();
-         }
-         else {
-             currrentWordPosition=selection-noOfWords;
-             currentSelectedWord=words.get(currrentWordPosition).text();
-         }
+    public String selectWord(int selection) {
+        String currentSelectedWord = "";
+
+        Document doc = Jsoup.parse(htmlView.getText(), "UTF-8");
+        Elements words = doc.select("span.ocrx_word");
+        int noOfWords = words.size();
+
+        if (selection < noOfWords && selection > 0) {
+            currentSelectedWord = words.get(selection).text();
+        } else if (selection < noOfWords && selection < 0) {
+            currrentWordPosition = noOfWords + selection;
+            currentSelectedWord = words.get(currrentWordPosition).text();
+        } else if (selection < noOfWords && selection == 0) {
+            currentSelectedWord = words.get(currrentWordPosition).text();
+        } else {
+            currrentWordPosition = selection - noOfWords;
+            currentSelectedWord = words.get(currrentWordPosition).text();
+        }
 
         return currentSelectedWord;
 
     }
 
-    /**
-     * @param args the command line arguments
-     */
+//    /**
+//     * @param args the command line arguments
+//     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
