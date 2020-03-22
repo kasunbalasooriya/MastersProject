@@ -75,8 +75,8 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
         setName("Output Preview"); // NOI18N
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
-                outputWindowClosedHandler(evt);
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                closeOutputPreviewHandler(evt);
             }
         });
 
@@ -180,9 +180,9 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
         File file = new File(htmlFilePath + "\\" + htmlFileName);
 
         if (file.delete()) {
-            log.info("deleted file without saving " + file.getName());
+            log.info("OCR cancelled; deleted file without saving " + file.getName());
         } else {
-            log.info("failed to delete file before cancelling" + file.getName());
+            log.info("failed to delete file before cancelling file Name :" + file.getName());
         }
 
         this.dispose();
@@ -193,19 +193,18 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
         htmlView.setFont(new Font(jComboBox1.getSelectedItem().toString(), 0, 18));
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    private void outputWindowClosedHandler(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_outputWindowClosedHandler
-        // TODO add your handling code here:
+    private void closeOutputPreviewHandler(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeOutputPreviewHandler
         
-        File file = new File(htmlFilePath + "\\" + htmlFileName);
+         File file = new File(htmlFilePath + "\\" + htmlFileName);
 
         if (file.delete()) {
             log.info("deleted file without saving " + file.getName());
         } else {
-            log.info("failed to delete file before cancelling" + file.getName());
+            log.info("failed to delete file before cloasing output preview window File Name:  " + file.getName());
         }
 
         this.dispose();
-    }//GEN-LAST:event_outputWindowClosedHandler
+    }//GEN-LAST:event_closeOutputPreviewHandler
 
     public String selectWord(int selection) {
         String currentSelectedWord = "";
