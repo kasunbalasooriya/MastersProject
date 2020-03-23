@@ -5,6 +5,7 @@
  */
 package com.LankaOCR.Forms;
 
+import com.LankaOCR.OCRActions.OcrActions;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -13,7 +14,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.text.html.HTMLEditorKit;
 
 /**
  *
@@ -32,25 +32,29 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
     private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     static String htmlFileName, htmlFilePath;
 
-    public void loadFile(String hocrOutput, String htmlOutputFileName , String inputFileDirectory) throws IOException {
+    public void loadFile(String hocrOutput, String htmlOutputFileName, String inputFileDirectory) throws IOException {
 
-        htmlFileName =htmlOutputFileName;
+        htmlFileName = htmlOutputFileName;
         htmlFilePath = inputFileDirectory;
+
+        //Normalize the hocr Output
+        OcrActions instance = new OcrActions();
         
+
         GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Font[] fonts = e.getAllFonts(); // Get the fonts
         for (Font f : fonts) {
             jComboBox1.addItem(f.getName());
         }
-        
-        File file = new File(htmlFilePath+"\\"+htmlFileName);
+
+        File file = new File(htmlFilePath + "\\" + htmlFileName);
+        instance.NormalizeOutputText(file);
         htmlView.setEditable(false);
         htmlView.setFont(new Font("Iskoola Pota", 0, 18));
         htmlView.setContentType("text/html;charset=utf-8");
         htmlView.setPage(file.toURI().toURL());
         htmlView.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
         jScrollPane1.add(htmlView);
-        
 
     }
 
@@ -161,7 +165,7 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
 
         File htmlFile = new File(htmlFilePath + "\\" + htmlFileName);
-        File wordFile = new File(htmlFilePath + "\\" + htmlFileName.substring(0, htmlFileName.length()-5) + ".doc");
+        File wordFile = new File(htmlFilePath + "\\" + htmlFileName.substring(0, htmlFileName.length() - 5) + ".doc");
         if (htmlFile.renameTo(wordFile)) {
             log.info("final output written to : " + htmlFilePath + "  with name : " + htmlFileName + ".doc");
         } else {
@@ -194,8 +198,8 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void closeOutputPreviewHandler(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeOutputPreviewHandler
-        
-         File file = new File(htmlFilePath + "\\" + htmlFileName);
+
+        File file = new File(htmlFilePath + "\\" + htmlFileName);
 
         if (file.delete()) {
             log.info("deleted file without saving " + file.getName());
