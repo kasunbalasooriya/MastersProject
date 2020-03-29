@@ -78,15 +78,68 @@ public class OcrActions {
 
     private String applyNormalizationRules(String wordString) {
 
-        //Sinhala Code point range in decimal 3456-3583
-        
-        //merge Vowel modifiers to the original modifiers
-        
-        
-        String returnString = wordString.replace(Character.toString((char) 3482), Character.toString((char) 65));
-        log.info(returnString);
+        String modifiedWordString=wordString;
 
-        return returnString;
+        /** Sinhala Code point range in decimal 3456-3583 **/
+        
+        // Start Replace the Vowels with modifies to the proper character
+        
+        if (wordString.charAt(0) == 3461 && wordString.charAt(1) == 3535) { //          SINHALA LETTER AAYANNA
+            
+            modifiedWordString = wordString.replace(Character.toString(wordString.charAt(0)), Character.toString((char) 3462));
+            StringBuilder tempWordString1 = new StringBuilder(modifiedWordString);
+            tempWordString1.deleteCharAt(1);
+            modifiedWordString=tempWordString1.toString();
+            
+        } else if(wordString.charAt(0) == 3461 && wordString.charAt(1) == 3536){ //     SINHALA LETTER AEYANNA
+            
+            modifiedWordString = wordString.replace(Character.toString(wordString.charAt(0)), Character.toString((char) 3463));
+            StringBuilder tempWordString2 = new StringBuilder(modifiedWordString);
+            tempWordString2.deleteCharAt(1);
+            modifiedWordString=tempWordString2.toString();
+        
+        } else if (wordString.charAt(0) == 3461 && wordString.charAt(1) == 3537){ //	SINHALA LETTER AEEYANNA
+        
+            modifiedWordString = wordString.replace(Character.toString(wordString.charAt(0)), Character.toString((char) 3464));
+            StringBuilder tempWordString3 = new StringBuilder(modifiedWordString);
+            tempWordString3.deleteCharAt(1);
+            modifiedWordString=tempWordString3.toString();
+            
+        } else if (wordString.charAt(0) == 3467 && wordString.charAt(1) == 3551) { //   SINHALA LETTER UUYANNA
+        
+            modifiedWordString = wordString.replace(Character.toString(wordString.charAt(0)), Character.toString((char) 3468));
+            StringBuilder tempWordString4 = new StringBuilder(modifiedWordString);
+            tempWordString4.deleteCharAt(1);
+            modifiedWordString=tempWordString4.toString();
+        
+        } else if (wordString.charAt(0) == 3545 && wordString.charAt(1) == 3473) { // 	SINHALA LETTER AIYANNA
+        
+            modifiedWordString = wordString.replace(Character.toString(wordString.charAt(1)), Character.toString((char) 3475));
+            StringBuilder tempWordString5 = new StringBuilder(modifiedWordString);
+            tempWordString5.deleteCharAt(0);
+            modifiedWordString=tempWordString5.toString();
+            
+        } else if (wordString.charAt(0) == 3476 && wordString.charAt(1) == 3551) { //  SINHALA LETTER AUYANNA
+        
+            modifiedWordString = wordString.replace(Character.toString(wordString.charAt(0)), Character.toString((char) 3478));
+            StringBuilder tempWordString6 = new StringBuilder(modifiedWordString);
+            tempWordString6.deleteCharAt(1);
+            modifiedWordString=tempWordString6.toString();
+        }
+        
+        //TODO : add  follwoing Vowel rules Later 
+        /*
+        	SINHALA LETTER IRUYANNA
+                SINHALA LETTER IRUUYANNA
+        	SINHALA LETTER ILUUYANNA
+        
+        */
+        
+        
+        // End Replace the Vowels with modifies to the proper character
+        
+
+        return modifiedWordString;
     }
 
     private static String escapeNonAscii(String str) {
