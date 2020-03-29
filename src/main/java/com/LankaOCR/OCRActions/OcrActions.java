@@ -7,7 +7,6 @@ package com.LankaOCR.OCRActions;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -46,9 +45,6 @@ public class OcrActions {
     public void NormalizeOutputText(File ocrOutputString) {
 
         String innerSpanContent, innerText, normalizedInnerText;
-//    File inputHtml = new File(ocrOutputString);
-        OutputStreamWriter tempFileWriter;
-//    List<String> outputWordList = new ArrayList<>();
 
         try {
             Document inputHtmlDoc = Jsoup.parse(ocrOutputString, "UTF-8");
@@ -59,7 +55,7 @@ public class OcrActions {
 
                 innerSpanContent = span.html();
                 innerText = span.text();
-                normalizedInnerText = applyNormalizationRules(innerText);
+                normalizedInnerText = applyVowelNormalizationRules(innerText); // Apply Vowel Normalization rules
                 innerSpanContent = innerSpanContent.replace(innerText, normalizedInnerText);
                 span.html(innerSpanContent);
 
@@ -76,7 +72,7 @@ public class OcrActions {
 //    return null;
     }
 
-    private String applyNormalizationRules(String wordString) {
+    private String applyVowelNormalizationRules(String wordString) {
 
         String modifiedWordString=wordString;
 
