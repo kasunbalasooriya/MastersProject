@@ -136,12 +136,8 @@ public class OcrActions {
     }
 
     private String applyConsonentNormalizationRules(String innerText) {
-        
+
         log.info("Currently Processing " + innerText);
-        
-        
-        
-        
 
         return innerText;
     }
@@ -152,14 +148,21 @@ public class OcrActions {
         sb.setCharAt(j, str.charAt(i));
         return sb.toString();
     }
-    
-    static String insertCharAt(String inputString, char inputChar, int charPosition){
-    StringBuilder sb = new StringBuilder(inputString);
-    sb.insert(charPosition, inputChar);
-    return sb.toString();
-    
+
+    static String insertCharAt(String inputString, char inputChar, int charPosition) {
+        StringBuilder sb = new StringBuilder(inputString);
+        sb.insert(charPosition, inputChar);
+        return sb.toString();
+
     }
-    
+
+    static String deleteCharAt(String inputString, int charPosition) {
+
+        StringBuilder sb = new StringBuilder(inputString);
+        sb.deleteCharAt(charPosition);
+        return sb.toString();
+
+    }
 
     private static String escapeNonAscii(String str) {
 
