@@ -167,7 +167,8 @@ public class StartWindow extends javax.swing.JFrame {
             }
 
             outputPreviewWindow.loadFile(hocrOutput, String.valueOf(currentTime) + ".html", inputFilePath);
-            outputPreviewWindow.setExtendedState(outputPreviewWindow.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            outputPreviewWindow.setExtendedState(outputPreviewWindow.getExtendedState() | JFrame.NORMAL);
+            outputPreviewWindow.setLocationRelativeTo(null);
             outputPreviewWindow.setResizable(Boolean.FALSE);
             outputPreviewWindow.pack();
             outputPreviewWindow.setVisible(true);
