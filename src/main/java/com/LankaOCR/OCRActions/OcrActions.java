@@ -138,88 +138,10 @@ public class OcrActions {
     private String applyConsonentNormalizationRules(String innerText) {
         
         log.info("Currently Processing " + innerText);
-        for (int currentPos = 0; currentPos < innerText.length();) {
-
-            if (currentPos + 3 <= innerText.length()) { // Max permutations (4 characters) ommiting zero with joiner(8205)
-
-                if (innerText.charAt(currentPos) == 3545 && innerText.charAt(currentPos + 1) == 3545
-                        && (innerText.charAt(currentPos + 2) >= 3482 && innerText.charAt(currentPos + 2) <= 3526)) { //	SINHALA VOWEL SIGN KOMBU DEKA
-
-                    innerText = innerText.replace(Character.toString(innerText.charAt(currentPos)), Character.toString((char) 3545)); //replace the first  KOMBUWA with KOMBU DEKA
-                    StringBuilder tempText1 = new StringBuilder(innerText);
-                    tempText1.deleteCharAt(currentPos + 1); // delete the additionl KOMBUWA
-                    innerText = tempText1.toString();
-                    innerText = swapCharacters(innerText, currentPos, currentPos + 1); // SWAP KOMBU DEKA and CONSONANT
-                    currentPos += 2;
-
-                } else if (innerText.charAt(currentPos) == 3545
-                        && (innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526)
-                        && ((innerText.charAt(currentPos + 2) == 3535 && innerText.charAt(currentPos + 3) != 3530))) { // SINHALA VOWEL SIGN KOMBUVA FOLLOWED by CONSONANT
-
-                    innerText = swapCharacters(innerText, currentPos, currentPos + 1); //SWAP CONSONANT and KOMBUWA
-                    currentPos += 2;
-
-                } else if (innerText.charAt(currentPos) == 3545
-                        && (innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526
-                        && (innerText.charAt(currentPos + 2) == 3535) && innerText.charAt(currentPos + 3) == 3530)) { // SINHALA VOWEL SIGN KOMBUWA,CONSONANT,ELA-PILLA,AL-KIRRRMA
-
-                    StringBuilder tempText2 = new StringBuilder(innerText);
-                    tempText2.deleteCharAt(currentPos);
-                    tempText2.deleteCharAt(currentPos + 3);
-                    innerText = tempText2.toString();
-                    innerText = innerText.replace(Character.toString(innerText.charAt(currentPos + 2)), Character.toString((char) 3549));
-                    currentPos += 2;
-
-                } else {
-                    currentPos++;
-                }
-
-            } else if (currentPos + 2 <= innerText.length()) { // No of possible permutations :  3 Characters 
-
-                if (innerText.charAt(currentPos) == 3545 && innerText.charAt(currentPos + 1) == 3545
-                        && (innerText.charAt(currentPos + 2) >= 3482 && innerText.charAt(currentPos + 2) <= 3526)) { //	SINHALA VOWEL SIGN KOMBU DEKA
-
-                    innerText = innerText.replace(Character.toString(innerText.charAt(currentPos)), Character.toString((char) 3545)); //replace the first  KOMBUWA with KOMBU DEKA
-                    StringBuilder tempText1 = new StringBuilder(innerText);
-                    tempText1.deleteCharAt(currentPos + 1); // delete the additionl KOMBUWA
-                    innerText = tempText1.toString();
-                    innerText = swapCharacters(innerText, currentPos, currentPos + 1); // SWAP KOMBU DEKA and CONSONANT
-                    currentPos += 2;
-
-                } else if (innerText.charAt(currentPos) == 3545
-                        && (innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526)) { // SINHALA VOWEL SIGN KOMBUVA FOLLOWED by CONSONANT
-                    innerText = swapCharacters(innerText, currentPos, currentPos + 1); //SWAP CONSONANT and KOMBUWA
-                    currentPos += 2;
-
-                } else {
-                    currentPos++;
-                }
-
-            }
-
-            if (innerText.charAt(currentPos) == 3545 && innerText.charAt(currentPos + 1) == 3545
-                    && (innerText.charAt(currentPos + 2) >= 3482 && innerText.charAt(currentPos + 2) <= 3526)) { //	SINHALA VOWEL SIGN KOMBU DEKA
-
-                innerText = innerText.replace(Character.toString(innerText.charAt(currentPos)), Character.toString((char) 3545)); //replace the first  KOMBUWA with KOMBU DEKA
-                StringBuilder tempText1 = new StringBuilder(innerText);
-                tempText1.deleteCharAt(currentPos + 1); // delete the additionl KOMBUWA
-                innerText = tempText1.toString();
-                innerText = swapCharacters(innerText, currentPos, currentPos + 1); // SWAP KOMBU DEKA and CONSONANT
-                currentPos += 2;
-
-            } else if (innerText.charAt(currentPos) == 3545
-                    && (innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526)) { // SINHALA VOWEL SIGN KOMBUVA FOLLOWED by CONSONANT
-                innerText = swapCharacters(innerText, currentPos, currentPos + 1); //SWAP CONSONANT and KOMBUWA
-                currentPos += 2;
-
-            } else if (innerText.charAt(currentPos) == 3545
-                    && (innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526
-                    && (innerText.charAt(currentPos + 2) == 3535) && innerText.charAt(currentPos + 3) == 3530)) { // SINHALA VOWEL SIGN KOMBUWA,CONSONANT,ELA-PILLA,AL-KIRRRMA
-
-            } else {
-                currentPos++;
-            }
-        }
+        
+        
+        
+        
 
         return innerText;
     }
@@ -230,6 +152,14 @@ public class OcrActions {
         sb.setCharAt(j, str.charAt(i));
         return sb.toString();
     }
+    
+    static String insertCharAt(String inputString, char inputChar, int charPosition){
+    StringBuilder sb = new StringBuilder(inputString);
+    sb.insert(charPosition, inputChar);
+    return sb.toString();
+    
+    }
+    
 
     private static String escapeNonAscii(String str) {
 
