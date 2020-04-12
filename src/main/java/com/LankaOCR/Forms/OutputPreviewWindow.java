@@ -48,7 +48,7 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
         }
 
         File file = new File(htmlFilePath + "\\" + htmlFileName);
-        instance.NormalizeOutputText(file);
+        instance.normalizeOutputText(file);
         htmlView.setEditable(false);
         htmlView.setFont(new Font("Iskoola Pota", 0, 18));
         htmlView.setContentType("text/html;charset=utf-8");

@@ -22,7 +22,7 @@ public class OcrActions {
 
     private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
-    public String PerformOcr(String filePath) {
+    public String performOcr(String filePath) {
 
         String result = null;
         File imageFile = new File(filePath);
@@ -42,7 +42,7 @@ public class OcrActions {
         return result;
     }
 
-    public void NormalizeOutputText(File ocrOutputString) {
+    public void normalizeOutputText(File ocrOutputString) {
 
         String innerSpanContent, innerText, normalizedInnerText;
 
@@ -56,7 +56,7 @@ public class OcrActions {
                 innerSpanContent = span.html();
                 innerText = span.text();
                 normalizedInnerText = applyVowelNormalizationRules(innerText); // Apply Vowel Normalization rules
-                normalizedInnerText = applyConsonentNormalizationRules(innerText);
+//                normalizedInnerText = applyConsonentNormalizationRules(innerText);
                 innerSpanContent = innerSpanContent.replace(innerText, normalizedInnerText);
                 span.html(innerSpanContent);
 
@@ -124,7 +124,7 @@ public class OcrActions {
             modifiedWordString = tempWordString6.toString();
         }
 
-        //TODO : add  follwoing Vowel rules Later 
+        //TODO : add  following Vowel rules Later 
         /*
         	SINHALA LETTER IRUYANNA
                 SINHALA LETTER IRUUYANNA

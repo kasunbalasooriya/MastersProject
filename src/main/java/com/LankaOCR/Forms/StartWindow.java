@@ -28,7 +28,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 /**
  *
- * @author Sameera
+ * @author kasun
  */
 public class StartWindow extends javax.swing.JFrame {
 
@@ -158,7 +158,7 @@ public class StartWindow extends javax.swing.JFrame {
 
             // Run OCR for the selected file
             OcrActions ocrInstance = new OcrActions();
-            String hocrOutput = ocrInstance.PerformOcr(absolutePathWithFileName);
+            String hocrOutput = ocrInstance.performOcr(absolutePathWithFileName);
 
             long currentTime = System.currentTimeMillis();
 
