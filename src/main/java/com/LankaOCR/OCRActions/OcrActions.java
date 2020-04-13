@@ -137,7 +137,47 @@ public class OcrActions {
 
     private String applyConsonentNormalizationRules(String innerText) {
 
-        log.info("Currently Processing " + innerText);
+         log.info("Currently Processing for consonent norm: " + innerText);
+
+        int lengthOfString = innerText.length();
+
+        for (int currentPos = 0; currentPos < lengthOfString;) {
+            
+           
+            
+            if (innerText.charAt(currentPos) == 3545) { // 	SINHALA VOWEL SIGN KOMBUVA
+
+                if (currentPos + 5 <= lengthOfString) { // Maximum number of glyphs(5)
+
+                    currentPos++; //TODO implement Later                    
+                } else if (currentPos + 3 <= lengthOfString) { // kombuwa Consonant alapilla hal kireema
+                    if (( innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526)
+                            && innerText.charAt(currentPos + 2) == 3535 && innerText.charAt(currentPos + 3) == 3530) {
+                        
+                        log.info("The string before modification : "+innerText);
+                        
+                        innerText = innerText.replace(Character.toString(innerText.charAt(currentPos+3)), Character.toString((char) 3549));
+                        innerText = deleteCharAt(innerText, currentPos);
+                        innerText = deleteCharAt(innerText, currentPos + 1);
+                        
+                        log.info("The string after modification : "+innerText);
+
+                        lengthOfString = innerText.length();
+                        currentPos += 2;
+                    } else {
+
+                        currentPos++; //TODO implement Later
+                    }
+                } else {
+
+                    currentPos++; //TODO implement Later
+                }
+            } else {
+
+                currentPos++; //TODO implement Later
+            }
+
+        }
 
         return innerText;
     }
@@ -161,6 +201,12 @@ public class OcrActions {
         StringBuilder sb = new StringBuilder(inputString);
         sb.deleteCharAt(charPosition);
         return sb.toString();
+
+    }
+
+    static String replaceCharAt(String inputString, int charPosition, int inputChar) {
+
+        return inputString.replace(Character.toString(inputString.charAt(charPosition)), Character.toString((char) inputChar));
 
     }
 
