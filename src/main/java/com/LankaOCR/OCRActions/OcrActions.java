@@ -56,7 +56,7 @@ public class OcrActions {
                 innerSpanContent = span.html();
                 innerText = span.text();
                 normalizedInnerText = applyVowelNormalizationRules(innerText); // Apply Vowel Normalization rules
-//                normalizedInnerText = applyConsonentNormalizationRules(innerText);
+                normalizedInnerText = applyConsonentNormalizationRules(normalizedInnerText);
                 innerSpanContent = innerSpanContent.replace(innerText, normalizedInnerText);
                 span.html(innerSpanContent);
 
@@ -137,60 +137,77 @@ public class OcrActions {
 
     private String applyConsonentNormalizationRules(String innerText) {
 
-        // Sinhala Consonent character range between 3482 - 3526
-        int startingChar, middleChar, endChar;
-        char tempChar, firstChar, secondChar, thirdChar;
-        char[] innertTextCharArray = innerText.toCharArray();
+         log.info("Currently Processing for consonent norm: " + innerText);
 
-        for (int i = 0; i < innertTextCharArray.length -3;) {
+        int lengthOfString = innerText.length();
+
+        for (int currentPos = 0; currentPos < lengthOfString;) {
             
+           
             
-            startingChar = innerText.charAt(i);
-            middleChar = innerText.charAt(i + 1);
-            endChar = innerText.charAt(i + 2);
-            char[] tempCharArray = innerText.toCharArray();
-            
-            log.info(innerText+"- Length ="+innertTextCharArray.length+"  current processing Char : "+ startingChar );
-            
-            if (startingChar > 3535 && startingChar < 3571) {
-                switch (startingChar) {
+            if (innerText.charAt(currentPos) == 3545) { // 	SINHALA VOWEL SIGN KOMBUVA
 
-                    case 3545: //SINHALA VOWEL SIGN KOMBUVA
+                if (currentPos + 5 <= lengthOfString) { // Maximum number of glyphs(5)
 
-                        tempChar = tempCharArray[i + 2];
-                        firstChar = tempCharArray[i];
-                        secondChar = tempCharArray[i + 1];
-                        thirdChar = tempCharArray[i + 2];
+                    currentPos++; //TODO implement Later                    
+                } else if (currentPos + 3 <= lengthOfString) { // kombuwa Consonant alapilla hal kireema
+                    if (( innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526)
+                            && innerText.charAt(currentPos + 2) == 3535 && innerText.charAt(currentPos + 3) == 3530) {
+                        
+                        log.info("The string before modification : "+innerText);
+                        
+                        innerText = innerText.replace(Character.toString(innerText.charAt(currentPos+3)), Character.toString((char) 3549));
+                        innerText = deleteCharAt(innerText, currentPos);
+                        innerText = deleteCharAt(innerText, currentPos + 1);
+                        
+                        log.info("The string after modification : "+innerText);
 
-                        if (middleChar == 3545) { //SINHALA VOWEL SIGN KOMBU DEKA 
+                        lengthOfString = innerText.length();
+                        currentPos += 2;
+                    } else {
 
-                            //switch characters
-                            tempCharArray[i] = secondChar;
-                            tempCharArray[i + 1] = (char) 3547;
-                            String tempString = String.valueOf(tempCharArray);
-                            StringBuilder tempOutputString = new StringBuilder(tempString);
-                            tempOutputString.deleteCharAt(i + 3);
-                            innerText = tempOutputString.toString();
-                            i = i + 3;
+                        currentPos++; //TODO implement Later
+                    }
+                } else {
 
-                        } else if (middleChar >= 3482 && middleChar <= 3526) {
-
-                            tempCharArray[i] = secondChar;
-                            tempCharArray[i + 1] = (char) firstChar;
-                            innerText = String.valueOf(tempCharArray);
-                            i = i + 2;
-                        }
+                    currentPos++; //TODO implement Later
                 }
-
             } else {
-                
-                i++;
 
+                currentPos++; //TODO implement Later
             }
 
         }
 
         return innerText;
+    }
+
+    static String swapCharacters(String str, int i, int j) {
+        StringBuilder sb = new StringBuilder(str);
+        sb.setCharAt(i, str.charAt(j));
+        sb.setCharAt(j, str.charAt(i));
+        return sb.toString();
+    }
+
+    static String insertCharAt(String inputString, char inputChar, int charPosition) {
+        StringBuilder sb = new StringBuilder(inputString);
+        sb.insert(charPosition, inputChar);
+        return sb.toString();
+
+    }
+
+    static String deleteCharAt(String inputString, int charPosition) {
+
+        StringBuilder sb = new StringBuilder(inputString);
+        sb.deleteCharAt(charPosition);
+        return sb.toString();
+
+    }
+
+    static String replaceCharAt(String inputString, int charPosition, int inputChar) {
+
+        return inputString.replace(Character.toString(inputString.charAt(charPosition)), Character.toString((char) inputChar));
+
     }
 
     private static String escapeNonAscii(String str) {
