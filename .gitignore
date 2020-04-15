@@ -1,3 +1,5 @@
 
 target/*
 program.log
+target/classes/.netbeans_automatic_build
+target/test-classes/.netbeans_automatic_build
