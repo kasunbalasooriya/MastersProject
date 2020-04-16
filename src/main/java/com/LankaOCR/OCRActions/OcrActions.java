@@ -195,12 +195,29 @@ public class OcrActions {
                             lengthOfString = innerText.length();
                             currentPos += 2;
 
+                        } else if (innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526){
+                            
+                            innerText=swapCharacters(innerText, currentPos, currentPos+1);
+                            currentPos+=2;
+                        
                         } else {
 
                             currentPos++;
 
                         }
 
+                    } else if(currentPos + 1 <= lengthOfString) { // string of 2 chars tarting from kombuwa
+                        
+                        if(innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526){
+                            
+                            innerText=swapCharacters(innerText, currentPos, currentPos+1);
+                            currentPos+=2;
+                        
+                        }else {
+                            currentPos++;
+                        }
+                    
+                    
                     }
 
                     else {
