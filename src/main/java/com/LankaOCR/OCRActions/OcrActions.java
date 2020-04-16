@@ -194,6 +194,22 @@ public class OcrActions {
                             lengthOfString = innerText.length();
                             currentPos += 2;
 
+                        } else if (innerText.charAt(currentPos + 1) == 3545
+                                && (innerText.charAt(currentPos + 2) >= 3482 && innerText.charAt(currentPos + 2) <= 3526)) { // kombuwa combuwa and consonant
+                            
+                            log.info("The string before 3 char modification with kombuwa kombuwa and consonant : " + innerText);
+                            
+                            innerText = insertCharAt(innerText, (char) 3547, currentPos + 3);
+                            innerText = deleteCharAt(innerText, currentPos);
+                            innerText = deleteCharAt(innerText, currentPos);
+                            
+                            log.info("The string after 3 char modification with kombuwa kombuwa and consonant : " + innerText);
+
+                            lengthOfString = innerText.length();
+                            currentPos += 2;
+                            
+                            
+
                         } else if ((innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526)
                                 && (innerText.charAt(currentPos + 2) == 3551 || innerText.charAt(currentPos + 2) == 3530)) { // kombuwa consonant and hal kireema
 
