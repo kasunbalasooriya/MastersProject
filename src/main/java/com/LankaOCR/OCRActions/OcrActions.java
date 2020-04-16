@@ -137,7 +137,7 @@ public class OcrActions {
 
     private String applyConsonentNormalizationRules(String innerText) {
 
-         log.info("Currently Processing for consonent norm: " + innerText);
+        log.info("Currently Processing for consonent norm: " + innerText);
 
         int lengthOfString = innerText.length();
 
@@ -149,7 +149,7 @@ public class OcrActions {
                     if ((innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526)
                             && innerText.charAt(currentPos + 2) == 3535 && innerText.charAt(currentPos + 3) == 3530) { // kombuwa Consonant alapilla hal kireema
 
-                         log.info("The string before 4 char modification : " + innerText);
+                        log.info("The string before 4 char modification : " + innerText);
 
                         innerText = insertCharAt(innerText, (char) 3549, currentPos + 3);
                         // innerText.replace(Character.toString(innerText.charAt(currentPos + 3)),
@@ -158,7 +158,7 @@ public class OcrActions {
                         innerText = deleteCharAt(innerText, currentPos + 1);
                         innerText = deleteCharAt(innerText, currentPos + 2);
 
-                         log.info("The string after 4 char modification : " + innerText);
+                        log.info("The string after 4 char modification : " + innerText);
 
                         lengthOfString = innerText.length();
                         currentPos += 2;
@@ -168,59 +168,69 @@ public class OcrActions {
                         if ((innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526)
                                 && innerText.charAt(currentPos + 2) == 3535) { // kombuwa consonant and adapilla
 
-                             log.info("The string before 3 char modification with adapilla : " + innerText);
+                            log.info("The string before 3 char modification with adapilla : " + innerText);
 
                             innerText = insertCharAt(innerText, (char) 3548, currentPos + 2);
                             innerText = deleteCharAt(innerText, currentPos);
                             innerText = deleteCharAt(innerText, currentPos + 2);
                             // innerText = deleteCharAt(innerText, currentPos + 2);
 
-                             log.info("The string after 3 char modification with adapilla : " + innerText);
+                            log.info("The string after 3 char modification with adapilla : " + innerText);
 
                             lengthOfString = innerText.length();
                             currentPos += 2;
 
                         } else if ((innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526)
-                                && (innerText.charAt(currentPos + 2) == 3551 ||innerText.charAt(currentPos + 2) == 3571)) { // kombuwa consonant and gayanu kiththa
+                                && (innerText.charAt(currentPos + 2) == 3551 || innerText.charAt(currentPos + 2) == 3571)) { // kombuwa consonant and gayanu kiththa
 
-                             log.info("The string before 3 char modification with gayau kiththa : " + innerText);
+                            log.info("The string before 3 char modification with gayau kiththa : " + innerText);
 
                             innerText = insertCharAt(innerText, (char) 3550, currentPos + 2);
                             innerText = deleteCharAt(innerText, currentPos);
                             innerText = deleteCharAt(innerText, currentPos + 2);
 
-
-                             log.info("The string after 3 char modification gayau kiththa : " + innerText);
+                            log.info("The string after 3 char modification gayau kiththa : " + innerText);
 
                             lengthOfString = innerText.length();
                             currentPos += 2;
 
-                        } else if (innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526){
-                            
-                            innerText=swapCharacters(innerText, currentPos, currentPos+1);
-                            currentPos+=2;
-                        
+                        } else if ((innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526)
+                                && (innerText.charAt(currentPos + 2) == 3551 || innerText.charAt(currentPos + 2) == 3530)) { // kombuwa consonant and hal kireema
+
+                            log.info("The string before 3 char modification with kombuwa consonant and hal kireema : " + innerText);
+
+                            innerText = insertCharAt(innerText, (char) 3546, currentPos + 2);
+                            innerText = deleteCharAt(innerText, currentPos);
+                            innerText = deleteCharAt(innerText, currentPos + 2);
+
+                            log.info("The string after 3 char modification with kombuwa consonant and hal kireema : " + innerText);
+
+                            lengthOfString = innerText.length();
+                            currentPos += 2;
+
+                        } else if (innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526) { // kombuwa and consonant
+
+                            innerText = swapCharacters(innerText, currentPos, currentPos + 1);
+                            currentPos += 2;
+
                         } else {
 
                             currentPos++;
 
                         }
 
-                    } else if(currentPos + 1 <= lengthOfString) { // string of 2 chars tarting from kombuwa
-                        
-                        if(innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526){
-                            
-                            innerText=swapCharacters(innerText, currentPos, currentPos+1);
-                            currentPos+=2;
-                        
-                        }else {
+                    } else if (currentPos + 1 <= lengthOfString) { // string of 2 chars tarting from kombuwa
+
+                        if (innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526) { // kombuwa and sonsonant
+
+                            innerText = swapCharacters(innerText, currentPos, currentPos + 1);
+                            currentPos += 2;
+
+                        } else {
                             currentPos++;
                         }
-                    
-                    
-                    }
 
-                    else {
+                    } else {
 
                         currentPos++; // TODO implement Later
                     }
