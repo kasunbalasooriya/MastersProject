@@ -56,7 +56,7 @@ public class OcrActions {
                 innerSpanContent = span.html();
                 innerText = span.text();
                 normalizedInnerText = applyVowelNormalizationRules(innerText); // Apply Vowel Normalization rules
-                normalizedInnerText = applyConsonentNormalizationRules(normalizedInnerText);
+//                normalizedInnerText = applyConsonentNormalizationRules(normalizedInnerText); // Apply Consonant Normalization rules
                 innerSpanContent = innerSpanContent.replace(innerText, normalizedInnerText);
                 span.html(innerSpanContent);
 
@@ -196,19 +196,17 @@ public class OcrActions {
 
                         } else if (innerText.charAt(currentPos + 1) == 3545
                                 && (innerText.charAt(currentPos + 2) >= 3482 && innerText.charAt(currentPos + 2) <= 3526)) { // kombuwa combuwa and consonant
-                            
+
                             log.info("The string before 3 char modification with kombuwa kombuwa and consonant : " + innerText);
-                            
+
                             innerText = insertCharAt(innerText, (char) 3547, currentPos + 3);
                             innerText = deleteCharAt(innerText, currentPos);
                             innerText = deleteCharAt(innerText, currentPos);
-                            
+
                             log.info("The string after 3 char modification with kombuwa kombuwa and consonant : " + innerText);
 
                             lengthOfString = innerText.length();
                             currentPos += 2;
-                            
-                            
 
                         } else if ((innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526)
                                 && (innerText.charAt(currentPos + 2) == 3551 || innerText.charAt(currentPos + 2) == 3530)) { // kombuwa consonant and hal kireema
@@ -237,7 +235,7 @@ public class OcrActions {
 
                     } else if (currentPos + 1 <= lengthOfString) { // string of 2 chars tarting from kombuwa
 
-                        if (innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526) { // kombuwa and sonsonant
+                        if (innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526) { // kombuwa and consonant
 
                             innerText = swapCharacters(innerText, currentPos, currentPos + 1);
                             currentPos += 2;
@@ -249,6 +247,17 @@ public class OcrActions {
                     } else {
 
                         currentPos++; // TODO implement Later
+                    }
+
+                } else if (currentPos + 1 <= lengthOfString) { //kombuwa and consonant at the end of a word
+
+                    if (innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526) { // kombuwa and consonant
+
+                        innerText = swapCharacters(innerText, currentPos, currentPos + 1);
+                        currentPos += 2;
+
+                    } else {
+                        currentPos++;
                     }
 
                 } else {
