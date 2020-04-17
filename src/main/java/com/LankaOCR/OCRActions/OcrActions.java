@@ -74,6 +74,8 @@ public class OcrActions {
     }
 
     private String applyVowelNormalizationRules(String wordString) {
+        
+          // TODO : Add rule to drop chars before a vowel in a word
 
         String modifiedWordString = wordString;
 
@@ -136,6 +138,8 @@ public class OcrActions {
     }
 
     private String applyConsonentNormalizationRules(String innerText) {
+        
+        // TODO : Add rule to correct kroo
 
         int lengthOfString = innerText.length();
 
@@ -237,7 +241,7 @@ public class OcrActions {
 
                 } else {
 
-                    currentPos++; // TODO implement Later
+                    currentPos++; 
                 }
 
             } else {
