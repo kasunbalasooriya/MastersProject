@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.LankaOCR.OCRActions;
+package com.lankaocr.actions;
 
 import java.io.File;
 import java.io.IOException;

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.LankaOCR.Forms;
+package com.lankaocr.formwindows;
 
-import com.LankaOCR.OCRActions.OcrActions;
+import com.lankaocr.actions.OcrActions;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
