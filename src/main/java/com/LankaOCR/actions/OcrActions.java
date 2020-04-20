@@ -24,7 +24,7 @@ public class OcrActions {
 
     public String performOcr(String filePath) {
 
-        String result = null;
+        String hocrOutput = null;
         File imageFile = new File(filePath);
 
         Tesseract instance = new Tesseract();// JNA Interface Mapping
@@ -33,13 +33,13 @@ public class OcrActions {
         instance.setDatapath(".");
 
         try {
-            result = instance.doOCR(imageFile);
+            hocrOutput = instance.doOCR(imageFile);
 
         } catch (TesseractException e) {
             System.err.println(e.getMessage());
         }
 
-        return result;
+        return hocrOutput;
     }
 
     public void normalizeOutputText(File ocrOutputString) {
