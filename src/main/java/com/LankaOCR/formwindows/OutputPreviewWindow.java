@@ -30,12 +30,15 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
     }
 
     private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    static String htmlFileName, htmlFilePath;
+    static String htmlFileName;
+    static String textFileName;
+    static String htmlFilePath;
 
-    public void loadFile(String hocrOutput, String htmlOutputFileName, String inputFileDirectory) throws IOException {
+    public void loadFile(String hocrOutput, String htmlOutputFileName, String textoutputFileName, String inputFileDirectory) throws IOException {
 
         htmlFileName = htmlOutputFileName;
         htmlFilePath = inputFileDirectory;
+        textFileName = textoutputFileName;
 
         //Normalize the hocr Output
         OcrActions instance = new OcrActions();
@@ -181,12 +184,13 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
-        File file = new File(htmlFilePath + "\\" + htmlFileName);
+        File htmlFile = new File(htmlFilePath + "\\" + htmlFileName);
+        File textFile = new File(htmlFilePath + "\\" + textFileName);
 
-        if (file.delete()) {
-            log.info("OCR cancelled; deleted file without saving " + file.getName());
+        if (htmlFile.delete() && textFile.delete()) {
+            log.info("OCR cancelled; deleted file without saving " + htmlFile.getName());
         } else {
-            log.info("failed to delete file before cancelling file Name :" + file.getName());
+            log.info("failed to delete file before cancelling file Name :" + htmlFile.getName());
         }
 
         this.dispose();
@@ -200,8 +204,9 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
     private void closeOutputPreviewHandler(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeOutputPreviewHandler
 
         File file = new File(htmlFilePath + "\\" + htmlFileName);
+        File textFile = new File(htmlFilePath + "\\" + textFileName);
 
-        if (file.delete()) {
+        if (file.delete() && textFile.delete()) {
             log.info("deleted file without saving " + file.getName());
         } else {
             log.info("failed to delete file before cloasing output preview window File Name:  " + file.getName());
