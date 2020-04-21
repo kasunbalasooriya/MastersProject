@@ -95,7 +95,7 @@ public class OcrActions {
 //    return null;
     }
 
-    private String applyVowelNormalizationRules(String wordString) {
+    public String applyVowelNormalizationRules(String wordString) {
         
           // TODO : Add rule to drop chars before a vowel in a word
 
@@ -159,7 +159,7 @@ public class OcrActions {
         return modifiedWordString;
     }
 
-    private String applyConsonentNormalizationRules(String innerText) {
+    public String applyConsonentNormalizationRules(String innerText) {
         
         // TODO : Add rule to correct kroo
 
