@@ -147,7 +147,11 @@ public class StartWindow extends javax.swing.JFrame {
         return ocrInputImage;
     }
 
-    String inputFilePath, absolutePathWithFileName, inputImageFileName, language;
+    String inputFilePath;
+    String absolutePathWithFileName;
+    String inputImageFileName;
+    String language;
+    
 
     private void btnRunOcrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunOcrActionPerformed
 
@@ -158,16 +162,30 @@ public class StartWindow extends javax.swing.JFrame {
 
             // Run OCR for the selected file
             OcrActions ocrInstance = new OcrActions();
-            String hocrOutput = ocrInstance.performOcr(absolutePathWithFileName);
+            
+            String hocrOutput = ocrInstance.performOcr(absolutePathWithFileName); //GET HOCR output
+            String textOutput= ocrInstance.returnTextOutput(absolutePathWithFileName); // GET text output
+            
+            for (String word : textOutput.split(" ")){
+                
+            word=ocrInstance.applyVowelNormalizationRules(word);
+            word=ocrInstance.applyConsonentNormalizationRules(word);
+            
+            }
+            
 
             long currentTime = System.currentTimeMillis();
 
             try (OutputStreamWriter htmlDocWriter = new OutputStreamWriter(new FileOutputStream(inputFilePath + "\\" + currentTime + ".html"), StandardCharsets.UTF_8)) {
                 htmlDocWriter.write(hocrOutput);
             }
+            
+            try (OutputStreamWriter textDocWriter = new OutputStreamWriter(new FileOutputStream(inputFilePath + "\\" + currentTime + ".txt"), StandardCharsets.UTF_8)) {
+                textDocWriter.write(textOutput);
+            }
 
             outputPreviewWindow.loadFile(hocrOutput, String.valueOf(currentTime) + ".html", inputFilePath);
-            outputPreviewWindow.setExtendedState(outputPreviewWindow.getExtendedState() | JFrame.NORMAL);
+            outputPreviewWindow.setExtendedState(outputPreviewWindow.getExtendedState());
             outputPreviewWindow.setLocationRelativeTo(null);
             outputPreviewWindow.setResizable(Boolean.FALSE);
             outputPreviewWindow.pack();
