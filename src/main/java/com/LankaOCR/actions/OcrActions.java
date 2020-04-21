@@ -27,13 +27,13 @@ public class OcrActions {
         String hocrOutput = null;
         File imageFile = new File(filePath);
 
-        Tesseract instance = new Tesseract();// JNA Interface Mapping
-        instance.setLanguage("sin");
-        instance.setHocr(true);
-        instance.setDatapath(".");
+        Tesseract hocrInstance = new Tesseract();// JNA Interface Mapping
+        hocrInstance.setLanguage("sin");
+        hocrInstance.setHocr(true);
+        hocrInstance.setDatapath(".");
 
         try {
-            hocrOutput = instance.doOCR(imageFile);
+            hocrOutput = hocrInstance.doOCR(imageFile);
 
         } catch (TesseractException e) {
             System.err.println(e.getMessage());
@@ -41,6 +41,28 @@ public class OcrActions {
 
         return hocrOutput;
     }
+    
+    
+    public String returnTextOutput(String filePath){
+        
+        String textOutput = null;
+        File imageFile = new File(filePath);
+
+        Tesseract textInstance = new Tesseract();// JNA Interface Mapping
+        textInstance.setLanguage("sin");
+        textInstance.setDatapath(".");
+
+        try {
+            textOutput = textInstance.doOCR(imageFile);
+
+        } catch (TesseractException e) {
+            System.err.println(e.getMessage());
+        }
+
+        return textOutput;
+    
+    }
+    
 
     public void normalizeOutputText(File ocrOutputString) {
 
