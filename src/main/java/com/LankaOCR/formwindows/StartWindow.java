@@ -151,7 +151,7 @@ public class StartWindow extends javax.swing.JFrame {
     String absolutePathWithFileName;
     String inputImageFileName;
     String language;
-    
+
 
     private void btnRunOcrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunOcrActionPerformed
 
@@ -162,29 +162,33 @@ public class StartWindow extends javax.swing.JFrame {
 
             // Run OCR for the selected file
             OcrActions ocrInstance = new OcrActions();
-            
+
             String hocrOutput = ocrInstance.performOcr(absolutePathWithFileName); //GET HOCR output
-            String textOutput= ocrInstance.returnTextOutput(absolutePathWithFileName); // GET text output
-            
-            for (String word : textOutput.split(" ")){
-                
-            word=ocrInstance.applyVowelNormalizationRules(word);
-            word=ocrInstance.applyConsonentNormalizationRules(word);
-            
+            String textOutput = ocrInstance.returnTextOutput(absolutePathWithFileName); // GET text output
+            String oldText;
+
+            for (String line : textOutput.split("\r")) {
+
+                for (String word : line.split(" ")) {
+                    oldText = word;
+                    word = ocrInstance.applyVowelNormalizationRules(word);
+                    word = ocrInstance.applyConsonentNormalizationRules(word);
+                    textOutput = textOutput.replaceAll(oldText, word);
+
+                }
             }
-            
 
             long currentTime = System.currentTimeMillis();
 
             try (OutputStreamWriter htmlDocWriter = new OutputStreamWriter(new FileOutputStream(inputFilePath + "\\" + currentTime + ".html"), StandardCharsets.UTF_8)) {
                 htmlDocWriter.write(hocrOutput);
             }
-            
+
             try (OutputStreamWriter textDocWriter = new OutputStreamWriter(new FileOutputStream(inputFilePath + "\\" + currentTime + ".txt"), StandardCharsets.UTF_8)) {
                 textDocWriter.write(textOutput);
             }
 
-            outputPreviewWindow.loadFile(hocrOutput, String.valueOf(currentTime) + ".html", inputFilePath);
+            outputPreviewWindow.loadFile(hocrOutput, String.valueOf(currentTime) + ".html", String.valueOf(currentTime) + ".txt", inputFilePath);
             outputPreviewWindow.setExtendedState(outputPreviewWindow.getExtendedState());
             outputPreviewWindow.setLocationRelativeTo(null);
             outputPreviewWindow.setResizable(Boolean.FALSE);
@@ -209,12 +213,11 @@ public class StartWindow extends javax.swing.JFrame {
             log.info("You chose to open this file: "
                     + choose.getSelectedFile().getAbsolutePath());
         }
-        
+
         // set variable values for file path and input directory
         inputFilePath = choose.getCurrentDirectory().getAbsolutePath();
         inputImageFileName = choose.getSelectedFile().getName();
-        
-        
+
         StringBuilder file = new StringBuilder(inputFilePath);
 
         for (int p = file.length() - 1; p >= 0; p--) {
@@ -227,7 +230,7 @@ public class StartWindow extends javax.swing.JFrame {
         inputFilePath = file.toString();
 
         absolutePathWithFileName = inputFilePath + inputImageFileName;
-        tbInputFilePath.setText(absolutePathWithFileName);       
+        tbInputFilePath.setText(absolutePathWithFileName);
 
         try {
             FileInputStream in = new FileInputStream(absolutePathWithFileName);
