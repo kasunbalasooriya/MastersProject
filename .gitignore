@@ -2,3 +2,8 @@
 /program.log
 
 nbactions.xml
+target/maven-archiver/pom.properties
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+target/mavenproject1-1.0-SNAPSHOT.jar
+nbactions.xml
