@@ -165,17 +165,22 @@ public class StartWindow extends javax.swing.JFrame {
 
             String hocrOutput = ocrInstance.performOcr(absolutePathWithFileName); //GET HOCR output
             String textOutput = ocrInstance.returnTextOutput(absolutePathWithFileName); // GET text output
-            String oldText;
+            StringBuffer finalTextOutput = new StringBuffer();
+            StringBuffer sbLine = new StringBuffer();
 
             for (String line : textOutput.split("\r")) {
-
+                sbLine = sbLine.delete(0, finalTextOutput.length());
+                if (!line.equals("")) {
                 for (String word : line.split(" ")) {
-                    oldText = word;
                     word = ocrInstance.applyVowelNormalizationRules(word);
                     word = ocrInstance.applyConsonentNormalizationRules(word);
-                    textOutput = textOutput.replaceAll(oldText, word);
+                    sbLine.append(word);
+                    sbLine.append(" ");
 
                 }
+                }
+                finalTextOutput.append(sbLine); // appends line to string buffer
+                finalTextOutput.append("\n"); // line feed
             }
 
             long currentTime = System.currentTimeMillis();
@@ -185,7 +190,7 @@ public class StartWindow extends javax.swing.JFrame {
             }
 
             try (OutputStreamWriter textDocWriter = new OutputStreamWriter(new FileOutputStream(inputFilePath + "\\" + currentTime + ".txt"), StandardCharsets.UTF_8)) {
-                textDocWriter.write(textOutput);
+                textDocWriter.write(finalTextOutput.toString());
             }
 
             outputPreviewWindow.loadFile(hocrOutput, String.valueOf(currentTime) + ".html", String.valueOf(currentTime) + ".txt", inputFilePath);
