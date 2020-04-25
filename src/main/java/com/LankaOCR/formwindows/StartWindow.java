@@ -150,7 +150,7 @@ public class StartWindow extends javax.swing.JFrame {
     private String inputFilePath;
     private String absolutePathWithFileName;
     private String inputImageFileName;
-    private String language;
+
 
 
     private void btnRunOcrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunOcrActionPerformed
