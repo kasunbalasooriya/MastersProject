@@ -136,7 +136,7 @@ public class StartWindow extends javax.swing.JFrame {
     /**
      * method to render tiff ocrInputImage*
      */
-    static Image loadImage(byte[] data) throws Exception {
+    private static Image loadImage(byte[] data) throws Exception {
 
         SeekableStream stream = new ByteArraySeekableStream(data);
         String[] names = ImageCodec.getDecoderNames(stream);
@@ -165,12 +165,12 @@ public class StartWindow extends javax.swing.JFrame {
 
             String hocrOutput = ocrInstance.performOcr(absolutePathWithFileName); //GET HOCR output
             String textOutput = ocrInstance.returnTextOutput(absolutePathWithFileName); // GET text output
-            StringBuffer finalTextOutput = new StringBuffer();
+            StringBuilder finalTextOutput = new StringBuilder();
             StringBuffer sbLine = new StringBuffer();
 
             for (String line : textOutput.split("\r")) {
                 sbLine = sbLine.delete(0, finalTextOutput.length());
-                if (!line.equals("")) {
+                if (!"".equals(line)) {
                 for (String word : line.split(" ")) {
                     word = ocrInstance.applyVowelNormalizationRules(word);
                     word = ocrInstance.applyConsonentNormalizationRules(word);
