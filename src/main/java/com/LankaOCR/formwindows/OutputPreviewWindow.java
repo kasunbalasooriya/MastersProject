@@ -20,6 +20,11 @@ import java.io.IOException;
  * @author kasun
  */
 public class OutputPreviewWindow extends javax.swing.JFrame {
+    
+    static String htmlFileName;
+    static String textFileName;
+    static String htmlFilePath;
+    private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
     /**
      * Creates new form CorrectionsView
@@ -29,10 +34,8 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
 
     }
 
-    private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    static String htmlFileName;
-    static String textFileName;
-    static String htmlFilePath;
+    
+
 
     public void loadFile(String hocrOutput, String htmlOutputFileName, String textoutputFileName, String inputFileDirectory) throws IOException {
 
