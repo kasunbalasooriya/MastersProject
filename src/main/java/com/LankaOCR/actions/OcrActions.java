@@ -277,21 +277,21 @@ public class OcrActions {
         return innerText;
     }
 
-    static String swapCharacters(String str, int i, int j) {
+    private static String swapCharacters(String str, int i, int j) {
         StringBuilder sb = new StringBuilder(str);
         sb.setCharAt(i, str.charAt(j));
         sb.setCharAt(j, str.charAt(i));
         return sb.toString();
     }
 
-    static String insertCharAt(String inputString, char inputChar, int charPosition) {
+    private static String insertCharAt(String inputString, char inputChar, int charPosition) {
         StringBuilder sb = new StringBuilder(inputString);
         sb.insert(charPosition, inputChar);
         return sb.toString();
 
     }
 
-    static String deleteCharAt(String inputString, int charPosition) {
+    private static String deleteCharAt(String inputString, int charPosition) {
 
         StringBuilder sb = new StringBuilder(inputString);
         sb.deleteCharAt(charPosition);
@@ -299,7 +299,7 @@ public class OcrActions {
 
     }
 
-    static String replaceCharAt(String inputString, int charPosition, int inputChar) {
+    private static String replaceCharAt(String inputString, int charPosition, int inputChar) {
 
         return inputString.replace(Character.toString(inputString.charAt(charPosition)), Character.toString((char) inputChar));
 
