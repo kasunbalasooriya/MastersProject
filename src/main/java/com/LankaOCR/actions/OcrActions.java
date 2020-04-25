@@ -66,7 +66,9 @@ public class OcrActions {
 
     public void normalizeOutputText(File ocrOutputString) {
 
-        String innerSpanContent, innerText, normalizedInnerText;
+        String innerSpanContent;
+        String innerText;
+        String normalizedInnerText;
 
         try {
             Document inputHtmlDoc = Jsoup.parse(ocrOutputString, "UTF-8");
