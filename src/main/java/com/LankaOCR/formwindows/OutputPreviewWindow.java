@@ -21,9 +21,9 @@ import java.io.IOException;
  */
 public class OutputPreviewWindow extends javax.swing.JFrame {
     
-    static String htmlFileName;
-    static String textFileName;
-    static String htmlFilePath;
+    private static String htmlFileName;
+    private static String textFileName;
+    private static String htmlFilePath;
     private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
     /**
