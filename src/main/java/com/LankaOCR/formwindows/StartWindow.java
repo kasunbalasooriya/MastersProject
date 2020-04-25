@@ -147,10 +147,10 @@ public class StartWindow extends javax.swing.JFrame {
         return ocrInputImage;
     }
 
-    String inputFilePath;
-    String absolutePathWithFileName;
-    String inputImageFileName;
-    String language;
+    private String inputFilePath;
+    private String absolutePathWithFileName;
+    private String inputImageFileName;
+    private String language;
 
 
     private void btnRunOcrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunOcrActionPerformed
@@ -259,7 +259,7 @@ public class StartWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnChooseFileActionPerformed
 
-    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StartWindow.class);
+    private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StartWindow.class);
 
     /**
      * @param args the command line arguments
