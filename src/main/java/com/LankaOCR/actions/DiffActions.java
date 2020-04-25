@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.LankaOCR.actions;
+package com.lankaocr.actions;
 
 import java.util.LinkedList;
-import com.LankaOCR.actions.diff_match_patch.Operation;
+import com.lankaocr.actions.diff_match_patch.Operation;
 
 
 /**
