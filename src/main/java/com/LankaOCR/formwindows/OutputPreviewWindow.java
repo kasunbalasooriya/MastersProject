@@ -228,6 +228,7 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
 
         File htmlFile = new File(htmlFilePath + "\\" + htmlFileName);
         File textFile = new File(htmlFilePath + "\\" + textFileName);
+        File diffFile = new File(htmlFilePath + "\\" + "Diff_report_" + htmlFileName.substring(0, htmlFileName.length() - 5) + ".log");
 
        if (htmlFile.delete()) {
             log.info("deleted file without saving " + htmlFile.getName());
@@ -239,6 +240,12 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
             log.info("deleted file without saving " + textFile.getName());
         } else {
             log.info("failed to delete file before cloasing output preview window File Name:  " + textFile.getName());
+        }
+        
+        if (diffFile.delete()) {
+            log.info("deleted file without saving " + diffFile.getName());
+        } else {
+            log.info("failed to delete file before cloasing output preview window File Name:  " + diffFile.getName());
         }
 
         this.dispose();
@@ -253,6 +260,7 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
 
         File file = new File(htmlFilePath + "\\" + htmlFileName);
         File textFile = new File(htmlFilePath + "\\" + textFileName);
+        File diffFile = new File(htmlFilePath + "\\" + "Diff_report_" + htmlFileName.substring(0, htmlFileName.length() - 5) + ".log");
 
         if (file.delete()) {
             log.info("deleted file without saving " + file.getName());
@@ -264,6 +272,12 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
             log.info("deleted file without saving " + textFile.getName());
         } else {
             log.info("failed to delete file before cloasing output preview window File Name:  " + textFile.getName());
+        }
+        
+         if (diffFile.delete()) {
+            log.info("deleted file without saving " + diffFile.getName());
+        } else {
+            log.info("failed to delete file before cloasing output preview window File Name:  " + diffFile.getName());
         }
 
         this.dispose();
