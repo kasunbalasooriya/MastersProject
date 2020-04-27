@@ -192,8 +192,10 @@ public class StartWindow extends javax.swing.JFrame {
             try (OutputStreamWriter textDocWriter = new OutputStreamWriter(new FileOutputStream(inputFilePath + "\\" + currentTime + ".txt"), StandardCharsets.UTF_8)) {
                 textDocWriter.write(finalTextOutput.toString());
             }
+            
+            
 
-            outputPreviewWindow.loadFile(hocrOutput, String.valueOf(currentTime) + ".html", String.valueOf(currentTime) + ".txt", inputFilePath);
+            outputPreviewWindow.loadFile(hocrOutput, textOutput,String.valueOf(currentTime) + ".html", String.valueOf(currentTime) + ".txt", inputFilePath);
             outputPreviewWindow.setExtendedState(outputPreviewWindow.getExtendedState());
             outputPreviewWindow.setLocationRelativeTo(null);
             outputPreviewWindow.setResizable(Boolean.FALSE);
