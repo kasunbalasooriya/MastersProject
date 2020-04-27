@@ -12,10 +12,12 @@ import org.jsoup.select.Elements;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.InputStreamReader;
 
 
 /**
@@ -23,7 +25,7 @@ import java.util.Scanner;
  * @author kasun
  */
 public class OutputPreviewWindow extends javax.swing.JFrame {
-    
+
     private static String htmlFileName;
     private static String textFileName;
     private static String htmlFilePath;
@@ -37,9 +39,6 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
 
     }
 
-    
-
-
     public void loadFile(String hocrOutput, String htmlOutputFileName, String textoutputFileName, String inputFileDirectory) throws IOException {
 
         htmlFileName = htmlOutputFileName;
@@ -48,7 +47,6 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
 
         //Normalize the hocr Output
         OcrActions instance = new OcrActions();
-        
 
         GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Font[] fonts = e.getAllFonts(); // Get the fonts
@@ -66,22 +64,30 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
         jScrollPane1.add(htmlView);
 
     }
-    
-    private StringBuilder readOriginalInputText(String originalFilePath){
-    File textFile=new File(originalFilePath);
-    StringBuilder fileContent = new StringBuilder();
+
+    private StringBuilder readOriginalInputText(String originalFilePath) {
+        File textFile = new File(originalFilePath);
+
+        StringBuilder fileContent = new StringBuilder();
+
         try {
-            Scanner fileScanner= new Scanner(textFile);
-            while(fileScanner.hasNextLine()){
-            fileContent.append(fileScanner.nextLine());
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(textFile), "UTF-8"));
+            String st;
+            while ((st = br.readLine()) != null) {
+                fileContent.append(st);
             }
+            br.close();
         } catch (FileNotFoundException ex) {
             log.error(ex);
+        } catch (IOException ex) {
+            log.error(ex);
         }
-        log.info(fileContent);
-    return fileContent;
-    
-    }      
+
+        log.info("File Conent: " + fileContent.toString());
+
+        return fileContent;
+
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -98,6 +104,7 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
         btnCancel = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
+        btnGenerateDiff = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Output Preview");
@@ -140,6 +147,14 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel2.setText("Font : ");
 
+        btnGenerateDiff.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnGenerateDiff.setText("Generate Diff Report");
+        btnGenerateDiff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateDiffActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -147,7 +162,9 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 967, Short.MAX_VALUE)
+                        .addGap(0, 762, Short.MAX_VALUE)
+                        .addComponent(btnGenerateDiff, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(29, 29, 29)
                         .addComponent(btnCancel))
@@ -175,7 +192,8 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCancel))
+                    .addComponent(btnCancel)
+                    .addComponent(btnGenerateDiff, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -219,7 +237,7 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
+
         htmlView.setFont(new Font(jComboBox1.getSelectedItem().toString(), 0, 18));
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
@@ -236,6 +254,10 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
 
         this.dispose();
     }//GEN-LAST:event_closeOutputPreviewHandler
+
+    private void btnGenerateDiffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateDiffActionPerformed
+        StringBuilder originalText = readOriginalInputText(htmlFilePath + "\\" + "Latest_input.txt");
+    }//GEN-LAST:event_btnGenerateDiffActionPerformed
 
     public String selectWord(int selection) {
         String currentSelectedWord = "";
@@ -277,13 +299,17 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(OutputPreviewWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OutputPreviewWindow.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(OutputPreviewWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OutputPreviewWindow.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(OutputPreviewWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OutputPreviewWindow.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(OutputPreviewWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OutputPreviewWindow.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -298,6 +324,7 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnGenerateDiff;
     private javax.swing.JButton btnSave;
     private javax.swing.JEditorPane htmlView;
     private javax.swing.JComboBox jComboBox1;
