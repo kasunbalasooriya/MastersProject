@@ -7,6 +7,13 @@ package com.lankaocr.actions;
 
 import java.util.LinkedList;
 import com.lankaocr.actions.diff_match_patch.Operation;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 
 /**
@@ -14,22 +21,35 @@ import com.lankaocr.actions.diff_match_patch.Operation;
  * @author kasun
  */
 public class DiffActions {
+    private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
-    protected void createDiffReport(String orignalText, String ocrText, String reportOutputPath) { // method to create diff report
+    public void createDiffReport(String orignalText, String ocrText, String reportOutputPath) { // method to create diff report
 
         diff_match_patch dmp = new diff_match_patch();
-        LinkedList<diff_match_patch.Diff> diff = dmp.diff_main(orignalText, ocrText);
-        dmp.diff_cleanupSemantic(diff);
-//        StringBuilder out
+        LinkedList<diff_match_patch.Diff> diff = dmp.diff_main(orignalText, ocrText,true);
+//        dmp.diff_cleanupSemantic(diff);
+        StringBuilder equalWords = new StringBuilder();
         
 
         for (int i = 0; i < diff.size(); i++) {
 
             if (diff.get(i).operation == Operation.EQUAL) {
-                System.out.println(diff.get(i));
+                equalWords.append(diff.get(i));
+                equalWords.append("\n");
             }
         }
-
+        
+  
+       try (OutputStreamWriter diffWriter = new OutputStreamWriter(new FileOutputStream(reportOutputPath), StandardCharsets.UTF_8)) {
+                diffWriter.write(equalWords.toString());
+            } catch (IOException ex) {
+            log.error(ex);
+        }
+            
+        
     }
+    
+        
+         
 
 }
