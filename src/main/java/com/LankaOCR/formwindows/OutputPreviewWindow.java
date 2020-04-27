@@ -5,6 +5,7 @@
  */
 package com.lankaocr.formwindows;
 
+import com.lankaocr.actions.DiffActions;
 import com.lankaocr.actions.OcrActions;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,7 +20,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-
 /**
  *
  * @author kasun
@@ -29,6 +29,7 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
     private static String htmlFileName;
     private static String textFileName;
     private static String htmlFilePath;
+    private static String textOcrOutput;
     private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
     /**
@@ -39,11 +40,12 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
 
     }
 
-    public void loadFile(String hocrOutput, String htmlOutputFileName, String textoutputFileName, String inputFileDirectory) throws IOException {
+    public void loadFile(String hocrOutput, String textOutput, String htmlOutputFileName, String textoutputFileName, String inputFileDirectory) throws IOException {
 
         htmlFileName = htmlOutputFileName;
         htmlFilePath = inputFileDirectory;
         textFileName = textoutputFileName;
+        textOcrOutput = textOutput;
 
         //Normalize the hocr Output
         OcrActions instance = new OcrActions();
@@ -256,7 +258,12 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_closeOutputPreviewHandler
 
     private void btnGenerateDiffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateDiffActionPerformed
+        
         StringBuilder originalText = readOriginalInputText(htmlFilePath + "\\" + "Latest_input.txt");
+        String diffReportFile = htmlFilePath + "\\" + "Diff_report_" + htmlFileName.substring(0, htmlFileName.length() - 5) + ".log";
+        DiffActions diffAction = new DiffActions();
+        diffAction.createDiffReport(originalText.toString(), textOcrOutput, diffReportFile);
+        
     }//GEN-LAST:event_btnGenerateDiffActionPerformed
 
     public String selectWord(int selection) {
