@@ -225,14 +225,20 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        // TODO add your handling code here:
+
         File htmlFile = new File(htmlFilePath + "\\" + htmlFileName);
         File textFile = new File(htmlFilePath + "\\" + textFileName);
 
-        if (htmlFile.delete() && textFile.delete()) {
-            log.info("OCR cancelled; deleted file without saving " + htmlFile.getName());
+       if (htmlFile.delete()) {
+            log.info("deleted file without saving " + htmlFile.getName());
         } else {
-            log.info("failed to delete file before cancelling file Name :" + htmlFile.getName());
+            log.info("failed to delete file before cloasing output preview window File Name:  " + htmlFile.getName());
+        }
+        
+        if (textFile.delete()) {
+            log.info("deleted file without saving " + textFile.getName());
+        } else {
+            log.info("failed to delete file before cloasing output preview window File Name:  " + textFile.getName());
         }
 
         this.dispose();
@@ -248,10 +254,16 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
         File file = new File(htmlFilePath + "\\" + htmlFileName);
         File textFile = new File(htmlFilePath + "\\" + textFileName);
 
-        if (file.delete() && textFile.delete()) {
+        if (file.delete()) {
             log.info("deleted file without saving " + file.getName());
         } else {
             log.info("failed to delete file before cloasing output preview window File Name:  " + file.getName());
+        }
+        
+        if (textFile.delete()) {
+            log.info("deleted file without saving " + textFile.getName());
+        } else {
+            log.info("failed to delete file before cloasing output preview window File Name:  " + textFile.getName());
         }
 
         this.dispose();
