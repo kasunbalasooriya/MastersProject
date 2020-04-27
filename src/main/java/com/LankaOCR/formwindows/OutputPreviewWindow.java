@@ -13,7 +13,10 @@ import org.jsoup.select.Elements;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Scanner;
+
 
 /**
  *
@@ -63,6 +66,22 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
         jScrollPane1.add(htmlView);
 
     }
+    
+    private StringBuilder readOriginalInputText(String originalFilePath){
+    File textFile=new File(originalFilePath);
+    StringBuilder fileContent = new StringBuilder();
+        try {
+            Scanner fileScanner= new Scanner(textFile);
+            while(fileScanner.hasNextLine()){
+            fileContent.append(fileScanner.nextLine());
+            }
+        } catch (FileNotFoundException ex) {
+            log.error(ex);
+        }
+        log.info(fileContent);
+    return fileContent;
+    
+    }      
 
     /**
      * This method is called from within the constructor to initialize the form.
