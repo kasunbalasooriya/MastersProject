@@ -173,7 +173,7 @@ public class StartWindow extends javax.swing.JFrame {
                 if (!"".equals(line)) {
                 for (String word : line.split(" ")) {
                     word = ocrInstance.applyVowelNormalizationRules(word);
-                    word = ocrInstance.applyConsonentNormalizationRules(word);
+                    word = ocrInstance.applyConsonantNormalizationRules(word);
                     sbLine.append(word);
                     sbLine.append(" ");
 

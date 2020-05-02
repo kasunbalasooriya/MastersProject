@@ -80,7 +80,7 @@ public class OcrActions {
                 innerSpanContent = span.html();
                 innerText = span.text();
                 normalizedInnerText = applyVowelNormalizationRules(innerText); // Apply Vowel Normalization rules
-                normalizedInnerText = applyConsonentNormalizationRules(normalizedInnerText); // Apply Consonant Normalization rules
+                normalizedInnerText = applyConsonantNormalizationRules(normalizedInnerText); // Apply Consonant Normalization rules
                 innerSpanContent = innerSpanContent.replace(innerText, normalizedInnerText);
                 span.html(innerSpanContent);
 
@@ -161,7 +161,7 @@ public class OcrActions {
         return modifiedWordString;
     }
 
-    public String applyConsonentNormalizationRules(String innerText) {
+    public String applyConsonantNormalizationRules(String innerText) {
         
         // TODO : Add rule to correct kroo
 
