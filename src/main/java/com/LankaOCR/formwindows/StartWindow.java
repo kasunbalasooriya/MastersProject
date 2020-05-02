@@ -261,7 +261,7 @@ public class StartWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnChooseFileActionPerformed
 
-    private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StartWindow.class);
+   static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StartWindow.class);
 
     /**
      * @param args the command line arguments
