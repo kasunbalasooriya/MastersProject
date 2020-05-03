@@ -8,6 +8,8 @@ package com.lankaocr.actions;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.jsoup.Jsoup;
@@ -15,12 +17,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 /**
- *
  * @author kasun
  */
 public class OcrActions {
 
     private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private char[] charSet;
 
     public String performOcr(String filePath) {
 
@@ -41,10 +43,10 @@ public class OcrActions {
 
         return hocrOutput;
     }
-    
-    
-    public String returnTextOutput(String filePath){
-        
+
+
+    public String returnTextOutput(String filePath) {
+
         String textOutput = null;
         File imageFile = new File(filePath);
 
@@ -60,9 +62,9 @@ public class OcrActions {
         }
 
         return textOutput;
-    
+
     }
-    
+
 
     public void normalizeOutputText(File ocrOutputString) {
 
@@ -98,8 +100,8 @@ public class OcrActions {
     }
 
     public String applyVowelNormalizationRules(String wordString) {
-        
-          // TODO : Add rule to drop chars before a vowel in a word
+
+        // TODO : Add rule to drop chars before a vowel in a word
 
         String modifiedWordString = wordString;
 
@@ -162,12 +164,13 @@ public class OcrActions {
     }
 
     public String applyConsonantNormalizationRules(String innerText) {
-        
+
         // TODO : Add rule to correct kroo
 
+        char[] charSet = {3482, 3484, 3495, 3497, 3501, 3508, 3510};
         int lengthOfString = innerText.length();
 
-        for (int currentPos = 0; currentPos < lengthOfString;) {
+        for (int currentPos = 0; currentPos < lengthOfString; ) {
 
             if (innerText.charAt(currentPos) == 3545) { // SINHALA VOWEL SIGN KOMBUVA
 
@@ -265,13 +268,15 @@ public class OcrActions {
 
                 } else {
 
-                    currentPos++; 
+                    currentPos++;
                 }
 
             } else {
 
                 currentPos++;
             }
+
+
         }
 
         return innerText;
@@ -303,6 +308,15 @@ public class OcrActions {
 
         return inputString.replace(Character.toString(inputString.charAt(charPosition)), Character.toString((char) inputChar));
 
+    }
+
+    static boolean containsChar(char c, char[] array) {
+        for (char x : array) {
+            if (x == c) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static String escapeNonAscii(String str) {
