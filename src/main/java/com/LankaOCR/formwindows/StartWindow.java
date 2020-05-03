@@ -167,8 +167,9 @@ public class StartWindow extends javax.swing.JFrame {
             String textOutput = ocrInstance.returnTextOutput(absolutePathWithFileName); // GET text output
             StringBuilder finalTextOutput = new StringBuilder();
             StringBuffer sbLine = new StringBuffer();
+            String[] lines = textOutput.split("\\n");
 
-            for (String line : textOutput.split("\r")) {
+            for (String line : lines) {
                 sbLine = sbLine.delete(0, finalTextOutput.length());
                 if (!"".equals(line)) {
                 for (String word : line.split(" ")) {
@@ -261,7 +262,7 @@ public class StartWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnChooseFileActionPerformed
 
-   static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StartWindow.class);
+   private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StartWindow.class);
 
     /**
      * @param args the command line arguments
