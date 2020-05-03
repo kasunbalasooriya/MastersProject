@@ -181,7 +181,7 @@ public class StartWindow extends javax.swing.JFrame {
                 }
                 }
                 finalTextOutput.append(sbLine); // appends line to string buffer
-                finalTextOutput.append("\n"); // line feed
+                finalTextOutput.append("\r\n"); // line feed
             }
 
             long currentTime = System.currentTimeMillis();
