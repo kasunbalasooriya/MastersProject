@@ -29,7 +29,7 @@ public class OcrActions {
         File imageFile = new File(filePath);
 
         Tesseract hocrInstance = new Tesseract();// JNA Interface Mapping
-        hocrInstance.setLanguage("sin");
+        hocrInstance.setLanguage("sin+sin1");
         hocrInstance.setHocr(true);
         hocrInstance.setDatapath(".");
 
