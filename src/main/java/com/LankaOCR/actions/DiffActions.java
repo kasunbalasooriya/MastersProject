@@ -5,14 +5,13 @@
  */
 package com.lankaocr.actions;
 
-import java.util.LinkedList;
 import com.lankaocr.actions.diff_match_patch.Operation;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.LinkedList;
 
 
 
