@@ -5,16 +5,15 @@
  */
 package com.lankaocr.actions;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
-
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * @author kasun
@@ -310,7 +309,7 @@ public class OcrActions {
 
     }
 
-    static boolean containsChar(char c, char[] array) {
+    private static boolean containsChar(char c, char[] array) {
         for (char x : array) {
             if (x == c) {
                 return true;
