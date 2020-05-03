@@ -77,6 +77,7 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
             String st;
             while ((st = br.readLine()) != null) {
                 fileContent.append(st);
+                fileContent.append("\n");
             }
             br.close();
         } catch (FileNotFoundException ex) {
