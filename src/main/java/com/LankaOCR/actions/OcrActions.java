@@ -21,7 +21,7 @@ import java.io.PrintWriter;
 public class OcrActions {
 
     private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    private char[] charSet;
+    
 
     public String performOcr(String filePath) {
 
