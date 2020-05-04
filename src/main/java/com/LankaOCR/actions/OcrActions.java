@@ -82,6 +82,7 @@ public class OcrActions {
                 innerText = span.text();
                 normalizedInnerText = applyVowelNormalizationRules(innerText); // Apply Vowel Normalization rules
                 normalizedInnerText = applyConsonantNormalizationRules(normalizedInnerText); // Apply Consonant Normalization rules
+                normalizedInnerText = applySpecialConsonantRules(normalizedInnerText);
                 innerSpanContent = innerSpanContent.replace(innerText, normalizedInnerText);
                 span.html(innerSpanContent);
 
@@ -166,7 +167,7 @@ public class OcrActions {
 
         // TODO : Add rule to correct kroo
 
-        char[] charSet = {3482, 3484, 3495, 3497, 3501, 3508, 3510};
+
         int lengthOfString = innerText.length();
 
         for (int currentPos = 0; currentPos < lengthOfString; ) {
@@ -278,6 +279,38 @@ public class OcrActions {
 
         }
 
+        return innerText;
+    }
+
+    public String applySpecialConsonantRules(String innerText) {
+
+        int lengthOfString = innerText.length();
+        char[] charSet = {3482, 3484, 3495, 3497, 3501, 3508, 3510};
+
+        for (int currentPos = 0; currentPos < lengthOfString; ) {
+            if (currentPos + 5 <= lengthOfString) { // string of 6 chars starting from a consonant
+                if (containsChar(innerText.charAt(currentPos), charSet)) { // starting character is a consonant from the charSet
+                    if (innerText.charAt(currentPos + 1) == 3546 && innerText.charAt(currentPos + 2) == 8205
+                            && innerText.charAt(currentPos + 3) == 3515 && innerText.charAt(currentPos + 4) == 3535
+                            && innerText.charAt(currentPos + 5) == 3530) { // Sinhala Char Kroo
+                        innerText = swapCharacters(innerText, currentPos + 1, currentPos + 5);
+                        innerText = replaceCharAt(innerText, currentPos + 4, 3549);
+                        innerText = deleteCharAt(innerText, currentPos + 5);
+                        lengthOfString = innerText.length();
+                        currentPos = currentPos + 4;
+
+                    } else {
+                        currentPos++;
+                    }
+                } else {
+                    currentPos++;
+                }
+
+            } else {
+                currentPos++;
+            }
+
+        }
         return innerText;
     }
 
