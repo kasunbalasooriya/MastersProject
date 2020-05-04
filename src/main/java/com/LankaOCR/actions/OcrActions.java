@@ -21,7 +21,7 @@ import java.io.PrintWriter;
 public class OcrActions {
 
     private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    
+
 
     public String performOcr(String filePath) {
 
@@ -105,8 +105,8 @@ public class OcrActions {
 
         String modifiedWordString = wordString;
 
-        /**
-         * Sinhala Code point range in decimal 3456-3583 *
+        /*
+          Sinhala Code point range in decimal 3456-3583 *
          */
         // Start Replace the Vowels with modifies to the proper character
         if (wordString.charAt(0) == 3461 && wordString.charAt(1) == 3535) { //          SINHALA LETTER AAYANNA
