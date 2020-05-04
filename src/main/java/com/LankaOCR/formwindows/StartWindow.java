@@ -24,10 +24,10 @@ import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+
 import org.apache.log4j.PropertyConfigurator;
 
 /**
- *
  * @author kasun
  */
 public class StartWindow extends javax.swing.JFrame {
@@ -92,42 +92,42 @@ public class StartWindow extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tbInputFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnChooseFile)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnRunOcr)
-                        .addGap(34, 34, 34)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 92, Short.MAX_VALUE))))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addContainerGap())
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(tbInputFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(btnChooseFile)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(btnRunOcr)
+                                                .addGap(34, 34, 34)
+                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 92, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tbInputFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnChooseFile)
-                            .addComponent(btnRunOcr))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
-                .addContainerGap())
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(20, 20, 20)
+                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(16, 16, 16))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(tbInputFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(btnChooseFile)
+                                                        .addComponent(btnRunOcr))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
+                                .addContainerGap())
         );
 
         pack();
@@ -152,7 +152,6 @@ public class StartWindow extends javax.swing.JFrame {
     private String inputImageFileName;
 
 
-
     private void btnRunOcrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunOcrActionPerformed
 
         absolutePathWithFileName = tbInputFilePath.getText();
@@ -172,13 +171,14 @@ public class StartWindow extends javax.swing.JFrame {
             for (String line : lines) {
                 sbLine = sbLine.delete(0, finalTextOutput.length());
                 if (!"".equals(line)) {
-                for (String word : line.split(" ")) {
-                    word = ocrInstance.applyVowelNormalizationRules(word);
-                    word = ocrInstance.applyConsonantNormalizationRules(word);
-                    sbLine.append(word);
-                    sbLine.append(" ");
+                    for (String word : line.split(" ")) {
+                        word = ocrInstance.applyVowelNormalizationRules(word);
+                        word = ocrInstance.applyConsonantNormalizationRules(word);
+                        word = ocrInstance.applySpecialConsonantRules(word);
+                        sbLine.append(word);
+                        sbLine.append(" ");
 
-                }
+                    }
                 }
                 finalTextOutput.append(sbLine); // appends line to string buffer
                 finalTextOutput.append("\r\n"); // line feed
@@ -193,10 +193,9 @@ public class StartWindow extends javax.swing.JFrame {
             try (OutputStreamWriter textDocWriter = new OutputStreamWriter(new FileOutputStream(inputFilePath + "\\" + currentTime + ".txt"), StandardCharsets.UTF_8)) {
                 textDocWriter.write(finalTextOutput.toString());
             }
-            
-            
 
-            outputPreviewWindow.loadFile(hocrOutput, textOutput,String.valueOf(currentTime) + ".html", String.valueOf(currentTime) + ".txt", inputFilePath);
+
+            outputPreviewWindow.loadFile(hocrOutput, textOutput, String.valueOf(currentTime) + ".html", String.valueOf(currentTime) + ".txt", inputFilePath);
             outputPreviewWindow.setExtendedState(outputPreviewWindow.getExtendedState());
             outputPreviewWindow.setLocationRelativeTo(null);
             outputPreviewWindow.setResizable(Boolean.FALSE);
@@ -262,7 +261,7 @@ public class StartWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnChooseFileActionPerformed
 
-   private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StartWindow.class);
+    private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StartWindow.class);
 
     /**
      * @param args the command line arguments
@@ -275,7 +274,7 @@ public class StartWindow extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
