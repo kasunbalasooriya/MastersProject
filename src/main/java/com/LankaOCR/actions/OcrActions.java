@@ -22,6 +22,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author kasun
@@ -29,7 +31,7 @@ import java.util.List;
 public class OcrActions {
 
     private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-
+    String[][] confusionRuleArray;
 
     public String performOcr(String filePath) {
 
@@ -51,7 +53,6 @@ public class OcrActions {
         return hocrOutput;
     }
 
-
     public String returnTextOutput(String filePath) {
 
         String textOutput = null;
@@ -72,7 +73,6 @@ public class OcrActions {
 
     }
 
-
     public void runOcrErrorCorrectionEngine(File ocrOutputString) {
 
         String innerSpanContent;
@@ -82,8 +82,9 @@ public class OcrActions {
         try {
             Document inputHtmlDoc = Jsoup.parse(ocrOutputString, "UTF-8");
             PrintWriter writer = new PrintWriter(ocrOutputString, "UTF-8");
-            List <String> wordList = this.readFromWordLexicon();
-            
+            List<String> wordList = this.readFromWordLexicon();
+            confusionRuleArray=this.readConfusionPairs();
+
             //Choose each word in the output
             for (Element span : inputHtmlDoc.select("span.ocrx_word")) {
 
@@ -92,18 +93,19 @@ public class OcrActions {
                 normalizedInnerText = applyVowelNormalizationRules(innerText); // Apply Vowel Normalization rules
                 normalizedInnerText = applyConsonantNormalizationRules(normalizedInnerText); // Apply Consonant Normalization rules
                 normalizedInnerText = applySpecialConsonantRules(normalizedInnerText);
-                innerSpanContent = innerSpanContent.replace(innerText, normalizedInnerText);
-                //read and replace from lexicon
-                log.info(innerText +" : "+ this.findDictionaryMatch(normalizedInnerText, wordList));
-                span.html(innerSpanContent);
+
+                normalizedInnerText = applyConfusionRules(normalizedInnerText);
                 
+                innerSpanContent = innerSpanContent.replace(innerText, normalizedInnerText);
+                
+//                log.info(innerText + " : " + this.findDictionaryMatch(normalizedInnerText, wordList));
+                span.html(innerSpanContent);
 
             }
-            
+
             writer.write(inputHtmlDoc.html());
             writer.flush();
             writer.close();
-            
 
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
@@ -115,7 +117,6 @@ public class OcrActions {
     public String applyVowelNormalizationRules(String wordString) {
 
         // TODO : Add rule to drop chars before a vowel in a word
-
         String modifiedWordString = wordString;
 
         /*
@@ -179,11 +180,9 @@ public class OcrActions {
     public String applyConsonantNormalizationRules(String innerText) {
 
         // TODO : Add rule to correct kroo
-
-
         int lengthOfString = innerText.length();
 
-        for (int currentPos = 0; currentPos < lengthOfString; ) {
+        for (int currentPos = 0; currentPos < lengthOfString;) {
 
             if (innerText.charAt(currentPos) == 3545) { // SINHALA VOWEL SIGN KOMBUVA
 
@@ -289,7 +288,6 @@ public class OcrActions {
                 currentPos++;
             }
 
-
         }
 
         return innerText;
@@ -300,7 +298,7 @@ public class OcrActions {
         int lengthOfString = innerText.length();
         char[] charSet = {3482, 3484, 3495, 3497, 3501, 3508, 3510};
 
-        for (int currentPos = 0; currentPos < lengthOfString; ) {
+        for (int currentPos = 0; currentPos < lengthOfString;) {
             if (currentPos + 5 <= lengthOfString) { // string of 6 chars starting from a consonant
                 if (containsChar(innerText.charAt(currentPos), charSet)) { // starting character is a consonant from the charSet
                     if (innerText.charAt(currentPos + 1) == 3546 && innerText.charAt(currentPos + 2) == 8205
@@ -327,17 +325,21 @@ public class OcrActions {
         return innerText;
     }
 
-    public List<String> readFromWordLexicon(){
+    public String applyConfusionRules(String word){
+        
+        
+    return word;
+    }
+    public List<String> readFromWordLexicon() {
 
         File textFile = new File(".\\word_list.txt");
-        List <String> wordList= new ArrayList<>();
-        
+        List<String> wordList = new ArrayList<>();
 
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(textFile), "UTF-8"));
             String st;
-            while ((st = br.readLine())!=null) {
-               wordList.add(st);
+            while ((st = br.readLine()) != null) {
+                wordList.add(st);
 //               log.info(st);
             }
             br.close();
@@ -349,12 +351,43 @@ public class OcrActions {
 
         return wordList;
     }
-    
-    public boolean findDictionaryMatch(String word,List <String> wordList){
+
+    public boolean findDictionaryMatch(String word, List<String> wordList) {
         return wordList.contains(word);
-    
+
     }
-    
+
+    public String[][] readConfusionPairs() {
+        File file = new File(".\\confusion_pairs.txt");
+        List<String> confusionPairList = new ArrayList<>();
+
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+
+            String st;
+            while ((st = br.readLine()) != null) {
+                confusionPairList.add(st);
+            }
+            br.close();
+
+        } catch (FileNotFoundException ex) {
+            log.error(ex);
+        } catch (IOException ex) {
+             log.error(ex);
+        }
+
+        String[] tempArray = new String[confusionPairList.size()];
+        confusionPairList.toArray(tempArray);
+        String[][] confusionRules=new String[tempArray.length][];
+        
+        for(int i=0;i<tempArray.length;i++){
+        confusionRules[i]=tempArray[i].split(" ");
+        }
+
+        return confusionRules;
+
+    }
+
     private static String swapCharacters(String str, int i, int j) {
         StringBuilder sb = new StringBuilder(str);
         sb.setCharAt(i, str.charAt(j));
