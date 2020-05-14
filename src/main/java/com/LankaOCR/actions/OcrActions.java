@@ -18,12 +18,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author kasun
@@ -32,6 +28,7 @@ public class OcrActions {
 
     private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     String[][] confusionRuleArray;
+    List<String> wordList;
 
     public String performOcr(String filePath) {
 
@@ -82,22 +79,23 @@ public class OcrActions {
         try {
             Document inputHtmlDoc = Jsoup.parse(ocrOutputString, "UTF-8");
             PrintWriter writer = new PrintWriter(ocrOutputString, "UTF-8");
-            List<String> wordList = this.readFromWordLexicon();
-            confusionRuleArray=this.readConfusionPairs();
+            wordList = this.readFromWordLexicon();
+            confusionRuleArray = this.readConfusionPairs();
 
             //Choose each word in the output
             for (Element span : inputHtmlDoc.select("span.ocrx_word")) {
 
                 innerSpanContent = span.html();
                 innerText = span.text();
+
                 normalizedInnerText = applyVowelNormalizationRules(innerText); // Apply Vowel Normalization rules
                 normalizedInnerText = applyConsonantNormalizationRules(normalizedInnerText); // Apply Consonant Normalization rules
                 normalizedInnerText = applySpecialConsonantRules(normalizedInnerText);
-
-                normalizedInnerText = applyConfusionRules(normalizedInnerText);
-                
+                log.info("before confusion :" + normalizedInnerText);
+                normalizedInnerText = applyConfusionRules(normalizedInnerText); //Apply confusion rules
+                log.info("after confusion :" + normalizedInnerText);
                 innerSpanContent = innerSpanContent.replace(innerText, normalizedInnerText);
-                
+
 //                log.info(innerText + " : " + this.findDictionaryMatch(normalizedInnerText, wordList));
                 span.html(innerSpanContent);
 
@@ -325,11 +323,38 @@ public class OcrActions {
         return innerText;
     }
 
-    public String applyConfusionRules(String word){
-        
-        
-    return word;
+    public String applyConfusionRules(String word) {
+
+        String tempWord;
+        if (this.findDictionaryMatch(word, wordList)) {
+            return word;
+        } else {
+            for (int i = 0; i < confusionRuleArray.length; i++) {
+                if (word.contains(confusionRuleArray[i][0])) { //matching the confusion rule R->L
+                    tempWord = word.replaceFirst(confusionRuleArray[i][0], confusionRuleArray[i][1]);
+                    if (findDictionaryMatch(tempWord, wordList)) {
+                        return tempWord;
+                    } else {
+                        return word;
+                    }
+
+//                    log.info("confusion rule found" + confusionRuleArray[i][0] + " " + confusionRuleArray[i][1] + "  " + word);
+//                    log.info("replaced WOrd : " + word.replaceFirst(confusionRuleArray[i][0], confusionRuleArray[i][1]));
+                } else if (word.contains(confusionRuleArray[i][1])) {
+                    tempWord = word.replaceFirst(confusionRuleArray[i][1], confusionRuleArray[i][0]);
+                    if (findDictionaryMatch(tempWord, wordList)) {
+                        return tempWord;
+                    } else {
+                        return word;
+                    }
+                }
+            }
+//            return word;
+        }
+
+        return word;
     }
+
     public List<String> readFromWordLexicon() {
 
         File textFile = new File(".\\word_list.txt");
@@ -373,15 +398,15 @@ public class OcrActions {
         } catch (FileNotFoundException ex) {
             log.error(ex);
         } catch (IOException ex) {
-             log.error(ex);
+            log.error(ex);
         }
 
         String[] tempArray = new String[confusionPairList.size()];
         confusionPairList.toArray(tempArray);
-        String[][] confusionRules=new String[tempArray.length][];
-        
-        for(int i=0;i<tempArray.length;i++){
-        confusionRules[i]=tempArray[i].split(" ");
+        String[][] confusionRules = new String[tempArray.length][];
+
+        for (int i = 0; i < tempArray.length; i++) {
+            confusionRules[i] = tempArray[i].split(" ");
         }
 
         return confusionRules;
