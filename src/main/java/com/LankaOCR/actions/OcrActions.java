@@ -5,6 +5,7 @@
  */
 package com.lankaocr.actions;
 
+import java.io.BufferedReader;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.jsoup.Jsoup;
@@ -12,8 +13,15 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author kasun
@@ -65,7 +73,7 @@ public class OcrActions {
     }
 
 
-    public void normalizeOutputText(File ocrOutputString) {
+    public void runOcrErrorCorrectionEngine(File ocrOutputString) {
 
         String innerSpanContent;
         String innerText;
@@ -74,7 +82,8 @@ public class OcrActions {
         try {
             Document inputHtmlDoc = Jsoup.parse(ocrOutputString, "UTF-8");
             PrintWriter writer = new PrintWriter(ocrOutputString, "UTF-8");
-
+            List <String> wordList = this.readFromWordLexicon();
+            
             //Choose each word in the output
             for (Element span : inputHtmlDoc.select("span.ocrx_word")) {
 
@@ -84,13 +93,16 @@ public class OcrActions {
                 normalizedInnerText = applyConsonantNormalizationRules(normalizedInnerText); // Apply Consonant Normalization rules
                 normalizedInnerText = applySpecialConsonantRules(normalizedInnerText);
                 innerSpanContent = innerSpanContent.replace(innerText, normalizedInnerText);
+                //read and replace from lexicon
                 span.html(innerSpanContent);
+                
 
             }
-
+            
             writer.write(inputHtmlDoc.html());
             writer.flush();
             writer.close();
+            
 
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
@@ -314,6 +326,29 @@ public class OcrActions {
         return innerText;
     }
 
+    public List<String> readFromWordLexicon(){
+
+        File textFile = new File(".\\word_list.txt");
+        List <String> wordList= new ArrayList<>();
+        
+
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(textFile), "UTF-8"));
+            String st;
+            while ((st = br.readLine())!=null) {
+               wordList.add(st);
+               log.info(st);
+            }
+            br.close();
+        } catch (FileNotFoundException ex) {
+            log.error(ex);
+        } catch (IOException ex) {
+            log.error(ex);
+        }
+
+        return wordList;
+    }
+    
     private static String swapCharacters(String str, int i, int j) {
         StringBuilder sb = new StringBuilder(str);
         sb.setCharAt(i, str.charAt(j));
