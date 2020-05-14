@@ -94,6 +94,7 @@ public class OcrActions {
                 normalizedInnerText = applySpecialConsonantRules(normalizedInnerText);
                 innerSpanContent = innerSpanContent.replace(innerText, normalizedInnerText);
                 //read and replace from lexicon
+                log.info(innerText +" : "+ this.findDictionaryMatch(normalizedInnerText, wordList));
                 span.html(innerSpanContent);
                 
 
@@ -337,7 +338,7 @@ public class OcrActions {
             String st;
             while ((st = br.readLine())!=null) {
                wordList.add(st);
-               log.info(st);
+//               log.info(st);
             }
             br.close();
         } catch (FileNotFoundException ex) {
@@ -347,6 +348,11 @@ public class OcrActions {
         }
 
         return wordList;
+    }
+    
+    public boolean findDictionaryMatch(String word,List <String> wordList){
+        return wordList.contains(word);
+    
     }
     
     private static String swapCharacters(String str, int i, int j) {
