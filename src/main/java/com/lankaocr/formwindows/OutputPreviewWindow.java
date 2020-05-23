@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.LankaOCR.formwindows;
+package com.lankaocr.formwindows;
 
-import com.LankaOCR.actions.DiffActions;
-import com.LankaOCR.actions.OcrActions;
+import com.lankaocr.actions.DiffActions;
+import com.lankaocr.actions.OcrActions;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
