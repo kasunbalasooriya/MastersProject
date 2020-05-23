@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.lankaocr.actions;
+package com.LankaOCR.actions;
 
-import com.lankaocr.actions.diff_match_patch.Operation;
+import com.LankaOCR.actions.diff_match_patch.Operation;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

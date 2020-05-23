@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.lankaocr.actions;
+package com.LankaOCR.actions;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
