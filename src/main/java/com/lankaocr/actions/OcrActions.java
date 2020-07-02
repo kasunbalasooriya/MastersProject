@@ -164,14 +164,7 @@ public class OcrActions {
             modifiedWordString = tempWordString6.toString();
         }
 
-        //TODO : add  following Vowel rules Later 
-        /*
-        	SINHALA LETTER IRUYANNA
-                SINHALA LETTER IRUUYANNA
-        	SINHALA LETTER ILUUYANNA
-        
-         */
-        // End Replace the Vowels with modifies to the proper character
+
         return modifiedWordString;
     }
 
