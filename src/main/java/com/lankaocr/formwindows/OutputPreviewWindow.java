@@ -51,10 +51,10 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
         OcrActions instance = new OcrActions();
 
         GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        Font[] fonts = e.getAllFonts(); // Get the fonts
-        for (Font f : fonts) {
-            jComboBox1.addItem(f.getName());
-        }
+//        Font[] fonts = e.getAllFonts(); // Get the fonts
+//        for (Font f : fonts) {
+//            jComboBox1.addItem(f.getName());
+//        }
 
         File file = new File(htmlFilePath + "\\" + htmlFileName);
         instance.runOcrErrorCorrectionEngine(file);
@@ -105,9 +105,8 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
         htmlView = new javax.swing.JEditorPane();
         btnSave = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox();
-        jLabel2 = new javax.swing.JLabel();
         btnGenerateDiff = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Output Preview");
@@ -139,60 +138,47 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setFont(new java.awt.Font("Iskoola Pota", 1, 12)); // NOI18N
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel2.setText("Font : ");
-
         btnGenerateDiff.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnGenerateDiff.setText("Generate Diff Report");
+        btnGenerateDiff.setEnabled(false);
         btnGenerateDiff.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerateDiffActionPerformed(evt);
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel1.setText("OCR Output Preview");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 762, Short.MAX_VALUE)
-                        .addComponent(btnGenerateDiff, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
-                        .addComponent(btnCancel))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1068, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(64, 64, 64)))
+                .addGap(0, 762, Short.MAX_VALUE)
+                .addComponent(btnGenerateDiff, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(btnCancel)
                 .addContainerGap(15, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(56, 56, 56)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(434, 434, 434)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1068, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1))
+                .addContainerGap()
+                .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 568, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnCancel)
@@ -251,11 +237,6 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
 
         this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
-
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-
-        htmlView.setFont(new Font(jComboBox1.getSelectedItem().toString(), 0, 18));
-    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void closeOutputPreviewHandler(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeOutputPreviewHandler
 
@@ -361,8 +342,7 @@ public class OutputPreviewWindow extends javax.swing.JFrame {
     private javax.swing.JButton btnGenerateDiff;
     private javax.swing.JButton btnSave;
     private javax.swing.JEditorPane htmlView;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
