@@ -30,13 +30,13 @@ public class OcrActions {
     String[][] confusionRuleArray;
     List<String> wordList;
 
-    public String performOcr(String filePath) {
+    public String performOcr(String filePath,String languages) {
 
         String hocrOutput = null;
         File imageFile = new File(filePath);
 
         Tesseract hocrInstance = new Tesseract();// JNA Interface Mapping
-        hocrInstance.setLanguage("sin");
+        hocrInstance.setLanguage(languages);
         hocrInstance.setHocr(true);
         hocrInstance.setDatapath(".");
 
