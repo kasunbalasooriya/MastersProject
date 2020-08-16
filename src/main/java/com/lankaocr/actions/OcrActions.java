@@ -327,8 +327,6 @@ public class OcrActions {
                     tempWord = word.replaceFirst(confusionRuleArray[i][0], confusionRuleArray[i][1]);
                     if (findDictionaryMatch(tempWord, wordList)) {
                         return tempWord;
-                    } else {
-                        return word;
                     }
 
 //                    log.info("confusion rule found" + confusionRuleArray[i][0] + " " + confusionRuleArray[i][1] + "  " + word);
@@ -337,8 +335,6 @@ public class OcrActions {
                     tempWord = word.replaceFirst(confusionRuleArray[i][1], confusionRuleArray[i][0]);
                     if (findDictionaryMatch(tempWord, wordList)) {
                         return tempWord;
-                    } else {
-                        return word;
                     }
                 }
             }
