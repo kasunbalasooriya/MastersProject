@@ -182,12 +182,12 @@ public class StartWindow extends javax.swing.JFrame {
             OcrActions ocrInstance = new OcrActions();
 
             String hocrOutput = ocrInstance.performOcr(absolutePathWithFileName,tessdataLanguages); //GET HOCR output
-            String textOutput = ocrInstance.returnTextOutput(absolutePathWithFileName); // GET text output
+            String textOutput = ocrInstance.returnTextOutput(absolutePathWithFileName); // GET text output for diff feature
             StringBuilder finalTextOutput = new StringBuilder();
             StringBuffer sbLine = new StringBuffer();
             String[] lines = textOutput.split("\\n");
 
-            for (String line : lines) {
+            for (String line : lines) { // written to apply the correction rules for the .txt file for a future diff feature impl
                 sbLine = sbLine.delete(0, finalTextOutput.length());
                 if (!"".equals(line)) {
                     for (String word : line.split(" ")) {
@@ -210,7 +210,7 @@ public class StartWindow extends javax.swing.JFrame {
             }
 
             try (OutputStreamWriter textDocWriter = new OutputStreamWriter(new FileOutputStream(inputFilePath + "\\" + currentTime + ".txt"), StandardCharsets.UTF_8)) {
-                textDocWriter.write(finalTextOutput.toString());
+                textDocWriter.write(finalTextOutput.toString()); // write a text file to be used as a diff
             }
 
 
