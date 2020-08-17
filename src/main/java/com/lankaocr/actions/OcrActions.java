@@ -242,7 +242,7 @@ public class OcrActions {
 
                         }
 
-                    } else if (currentPos + 1 <= lengthOfString) { // string of 2 chars tarting from kombuwa
+                    } else if (currentPos + 1 <= lengthOfString) { // string of 2 chars starting from kombuwa
 
                         if (innerText.charAt(currentPos + 1) >= 3482 && innerText.charAt(currentPos + 1) <= 3526) { // kombuwa and consonant
 
